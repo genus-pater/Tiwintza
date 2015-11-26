@@ -17,71 +17,72 @@ import java.util.ArrayList;
  * @author Wmoina
  */
 public class TipoModelo {
-    public static boolean insertarTipo(TipoEntidad objTipoIngresar) throws Exception{
+
+    public static boolean insertarTipo(TipoEntidad objTipoIngresar) throws Exception {
         boolean boolRespuesta = false;
         try {
             ArrayList<Parametro> arrayListParametros = new ArrayList<>();
             String strSql = "select bd_st.fn_insert_tipo(?,?)";
-            arrayListParametros.add(new Parametro(1,objTipoIngresar.getTipo_nombre()));
-            arrayListParametros.add(new Parametro(2,objTipoIngresar.getTipo_descripcion()));
-            ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strSql,arrayListParametros);
-            while (conResultado.next()){
-                if (conResultado.getBoolean(0)==true) {
-                    boolRespuesta=true;
+            arrayListParametros.add(new Parametro(1, objTipoIngresar.getTipo_nombre()));
+            arrayListParametros.add(new Parametro(2, objTipoIngresar.getTipo_descripcion()));
+            ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strSql, arrayListParametros);
+            while (conResultado.next()) {
+                if (conResultado.getBoolean(0) == true) {
+                    boolRespuesta = true;
                 }
             }
-            conResultado =null;
+            conResultado = null;
         } catch (SQLException e) {
             System.err.println("error" + e.getMessage());
         }
         return boolRespuesta;
     }
-    
-    public static int actualizarTipo(TipoEntidad objTipoActualizar) throws Exception{
-    
-        int intRespuesta= 0;
+
+    public static int actualizarTipo(TipoEntidad objTipoActualizar) throws Exception {
+
+        int intRespuesta = 0;
         String strQuery = "select bd_st.fn_update_tipo(?,?,?)";
         ArrayList<Parametro> listParametros = new ArrayList<>();
-        listParametros.add(new Parametro(1,objTipoActualizar.getTipo_id()));
-        listParametros.add(new Parametro(2,objTipoActualizar.getTipo_nombre()));
-        listParametros.add(new Parametro(3,objTipoActualizar.getTipo_descripcion()));
-        ConjuntoResultado conResultado= AccesoDatos.ejecutaQuery(strQuery,listParametros);
+        listParametros.add(new Parametro(1, objTipoActualizar.getTipo_id()));
+        listParametros.add(new Parametro(2, objTipoActualizar.getTipo_nombre()));
+        listParametros.add(new Parametro(3, objTipoActualizar.getTipo_descripcion()));
+        ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strQuery, listParametros);
         while (conResultado.next()) {
-            intRespuesta= conResultado.getInt(0);
+            intRespuesta = conResultado.getInt(0);
         }
         return intRespuesta;
-     
+
     }
-    
-    public static ArrayList<TipoEntidad> obtenerTipo() throws Exception{
-        ArrayList<TipoEntidad> arrLstTipo =new ArrayList<>();
+
+    public static ArrayList<TipoEntidad> obtenerTipo() throws Exception {
+        ArrayList<TipoEntidad> arrLstTipo = new ArrayList<>();
         try {
             String strSql = "call bd_st.pr_select_tipo(); ";
             ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strSql);
-            arrLstTipo= llenarTipo(conResultado);
-            conResultado=null;
+            arrLstTipo = llenarTipo(conResultado);
+            conResultado = null;
         } catch (SQLException exConec) {
             throw new Exception(exConec.getMessage());
         }
         return arrLstTipo;
     }
-    
+
     public static ArrayList<TipoEntidad> llenarTipo(ConjuntoResultado conResultado) throws Exception {
         ArrayList<TipoEntidad> arrLstTipo = new ArrayList<>();
         TipoEntidad objTipo;
         try {
             while (conResultado.next()) {
-                objTipo= new TipoEntidad(Long.parseLong(conResultado.getBigInteger(0).toString()),conResultado.getString(1),conResultado.getString(2));
+                objTipo = new TipoEntidad(Long.parseLong(conResultado.getBigInteger(0).toString()), conResultado.getString(1), conResultado.getString(2));
                 arrLstTipo.add(objTipo);
             }
         } catch (Exception e) {
             arrLstTipo.clear();
-               throw e;
+            throw e;
         }
         return arrLstTipo;
     }
-    
-  public static int eliminarTipo(long lonTipoId) throws Exception {
+
+    public static int eliminarTipo(long lonTipoId) throws Exception {
         String strQuery = "select bd_st.fn_delete_tipo(?)";
         int intResultado = 0;
         ArrayList<Parametro> lisParametros = new ArrayList<>();

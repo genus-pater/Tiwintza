@@ -8,7 +8,9 @@ package ec.gob.tiwintza.modelos;
 import ec.gob.tiwintza.accesodatos.AccesoDatos;
 import ec.gob.tiwintza.accesodatos.ConjuntoResultado;
 import ec.gob.tiwintza.accesodatos.Parametro;
+import ec.gob.tiwintza.entidades.TipoEntidad;
 import ec.gob.tiwintza.entidades.UsuarioEntidad;
+import static ec.gob.tiwintza.modelos.TipoModelo.llenarTipo;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -73,6 +75,18 @@ public class UsuarioModelo {
         return arrLstSubcriterio;
     }
 
+    public static ArrayList<UsuarioEntidad> obtenerUsuario(String strSql) throws Exception {
+        ArrayList<UsuarioEntidad> arrLstUsuario = new ArrayList<>();
+        try {
+            ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strSql);
+            arrLstUsuario = llenarUsuario(conResultado);
+            conResultado = null;
+        } catch (SQLException exConec) {
+            throw new Exception(exConec.getMessage());
+        }
+        return arrLstUsuario;
+    }
+    
     public static ArrayList<UsuarioEntidad> llenarUsuario(ConjuntoResultado conResultado) throws Exception {
         ArrayList<UsuarioEntidad> arrLstSubcriterio = new ArrayList<>();
         UsuarioEntidad objUsuario;

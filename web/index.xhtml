@@ -1,14 +1,143 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Facelet Title</title>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+        <link href="#{request.contextPath}/resources/imagenes/favicon.ico" rel="shortcut icon"  type="image/x-icon" />
+        <title>SysTrack</title>
     </h:head>
-    <h:body>
-        Hello from Facelets
-        <br />
-        <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" />
+    <h:body  onload="#{sesionControlador.keepMeLogued()}" style="background-color: #27506c;width: 100%;height:100% ;border: none;page: auto; margin-left: 0px; margin-right: 0px;margin-bottom: 0px;margin-top: 0px">
+        <p:growl id="grlMensaje" life="3000" autoUpdate="true" />
+        <p:layout   style="width: 90%;height: 700px; margin-left: auto;margin-right: auto; position:static;border: none ">
+            <p:layoutUnit position="north" style="border: none;height: 80px" size="80">
+                <p:graphicImage id="graLogo" value="/resources/imagenes/logo_systrack.png" 
+                                style="margin-left: 7%;width: 165px;height: 58.9px;alignment-adjust: auto" onmouseout="achicar1()" onmouseover="agrandar1()"/>
+                <object align="right"><p:graphicImage  onclick="PF('wgLogin').show()" title="Iniciar Sesión" onmouseout="achicar()" onmouseover="agrandar()" id="graLogin" value="/resources/imagenes/perfil.png" 
+                                                       style="width: 50px;height: 50px;alignment-adjust: auto;cursor: pointer;margin-left: -150%"/></object> 
+                <script>
+                    function agrandar() {
+                        document.getElementById("graLogin").style.width = "55px";
+                        document.getElementById("graLogin").style.height = "55px";
+                    }
+                    function achicar() {
+                        document.getElementById("graLogin").style.width = "50px";
+                        document.getElementById("graLogin").style.height = "50px";
+                    }
+                    function agrandar1() {
+                        document.getElementById("graLogo").style.width = "170px";
+                        document.getElementById("graLogo").style.height = "63.9px";
+                    }
+                    function achicar1() {
+                        document.getElementById("graLogo").style.width = "165px";
+                        document.getElementById("graLogo").style.height = "58.9px";
+                    }
+                </script>
+
+            </p:layoutUnit>
+            <p:layoutUnit position="south" style="border: none;height: 50px;background: transparent" size="50">
+                <p:panel  style="background: transparent;border: none;">
+                    <center>
+                        <h:outputText value="® Derechos de autor GAD Municipal de Tiwintza &amp; " 
+                                      style="color: white;font-size: larger"/>
+                        <h:outputText value="LEWISA.SA" 
+                                      style="color: #2bb673;font-size: larger"/>
+                    </center>
+                </p:panel>
+            </p:layoutUnit>
+            <p:layoutUnit position="center" style="border: none;background: transparent;height: 550px" size="550" >
+                <h:form id="frmBuscarTramite">
+                    <p:panel id="pnlBuscarTramite" style="width: 500px;height: 350px;margin-left: auto;margin-right: auto; margin-top: 5%; position:static;">
+                        <center>
+                            <br/><h:outputText value="Escriba aquí su código" style="font-size: large"/><br/>
+                            <br/><p:separator style="width: 350px; border-top: 2px dashed gainsboro;border-bottom: none;border-right: none;border-left: none"/>
+                            <br/><p:inputText requiredMessage="Ingrese el código de su TRÁMITE" required="true" 
+                                              placeholder="Código de trámite" 
+                                              style="width: 300px;height: 25px"/><br/>
+                            <br/><p:selectBooleanCheckbox style="margin-left: -120px"/>
+                            <h:outputText value="Recordar mi código" style="margin-left: 30px"/>
+                            <br/><br/><br/><p:commandButton value="Buscar" style="width: 320px;background-color: #00897B"/>
+                        </center>
+                    </p:panel>
+                    <p:graphicImage value="/resources/imagenes/logo_tiwintza.png" style="width: 120px;height: 120px;margin-top: -20px;margin-left: 5%"/>
+                </h:form>
+            </p:layoutUnit>
+        </p:layout>
+
+        <p:dialog id="dlgLogin" widgetVar="wgLogin" showHeader="false" 
+                  modal="true" closable="false" resizable="false"
+                  showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
+                  width="460" height="440" >  
+            <h:form id="frmLogin">
+                <p:panel style="border: none; background-color: #EF6C00; width: 370px; height: 45px;margin-left: auto;margin-right: auto;font-weight: bolder">
+                    <center style="margin-top: 5px"><h:outputText value="Ingreso al sistema" style="font-size: large;color: white;"/></center>
+                </p:panel><br/>
+                <p:panel id="pnlLogin" style="width: 350px; height: 330px;margin-left: auto;margin-right: auto">
+                    <center><p:graphicImage value="/resources/imagenes/logo_systrack_s.png" id="kk"
+                                            style="width: 55px;height: 70px;margin-top: 20px"/><br/>
+                        <br/><p:inputText requiredMessage="Ingrese el nombre de USUARIO" required="true" 
+                                          placeholder="Nombre de Usuario" id="inpCuentaSesion" value="#{sesionControlador.objUsuario.usuario_cuenta}"  
+                                          style="width: 250px;height: 25px;margin-left: auto;margin-right: auto;position: static"/><br/>
+                        <br/><p:password requiredMessage="Ingrese la CONTRASEÑA" required="true" 
+                                         placeholder="Contraseña" id="inpContrasenaSesion" value="#{sesionControlador.objUsuario.usuario_password}" 
+                                         style="width: 250px;height: 25px; margin-left: auto;margin-right: auto;position: static"/><br/>
+                        <h:selectBooleanCheckbox  id="booLogin" style="margin-left: -80px;margin-top: 10px " 
+                                                  onchange="setLogin()"/><h:outputText value="Permanecer logueado" style="margin-left: 10px"/>
+
+                        <br/><p:separator style="width: 260px;border-top: 2px dashed gainsboro;border-bottom: none;border-right: none;border-left: none"/>
+                        <p:commandButton id="btnLogin" value="Ingresar" style="width: 150px;background-color: green"
+                                         update=":frmLogin"
+                                         action="#{sesionControlador.login()}"/>
+                    </center>
+                </p:panel>
+                <script type="text/javascript">
+                    function setLogin() {
+                        var bolLogin = document.getElementById("frmLogin:booLogin");
+                        var user = document.getElementById("frmLogin:inpCuentaSesion").value;
+                        var pass = document.getElementById("frmLogin:inpContrasenaSesion").value;
+                        if (user !== '')
+                            if (pass !== '')
+                                if (bolLogin.checked) {
+                                    var expires = new Date();
+                                    expires.setTime(expires.getTime() + 31500000); //1 year
+                                    document.cookie = 'user=' + user + ';expires=' + expires.toUTCString();
+                                    document.cookie = 'pass=' + pass + ';expires=' + expires.toUTCString();
+                                } else {
+                                    document.cookie = 'user=;expires=Thu, 01 Jan 1970 00:00:00 UTC';
+                                    document.cookie = 'pass=;expires=Thu, 01 Jan 1970 00:00:00 UTC';
+                                }
+                    }
+
+                    function getCookie(cname) {
+                        var name = cname + "=";
+                        var ca = document.cookie.split(';');
+                        for (var i = 0; ca.length > i; i++) {
+                            var c = ca[i];
+                            while (c.charAt(0) === ' ')
+                                c = c.substring(1);
+                            if (c.indexOf(name) === 0)
+                                return c.substring(name.length, c.length);
+                        }
+                        return "";
+                    }
+
+                    function login() {
+                        var user = getCookie("user");
+                        var pass = getCookie("pass");
+                        if (user !== '') {
+                            if (pass !== '') {
+                                window.location.href="/Tiwintza/faces/keepMeLogued.jsp";
+                            }
+                        }
+                    }
+                </script>   
+                <p:blockUI block="pnlLogin" trigger="btnLogin" >
+                    <p:graphicImage value="/resources/imagenes/ajax-loader.gif"/>
+                </p:blockUI>
+            </h:form> 
+        </p:dialog>
     </h:body>
 </html>
 

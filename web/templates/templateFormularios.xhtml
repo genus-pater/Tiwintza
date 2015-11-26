@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -11,41 +12,86 @@
         <h:outputStylesheet name="./css/cssLayout.css"/>
         <h:outputStylesheet name="./css/default.css"/>
         <h:outputScript library="js" name="jsfcrud.js"/>
+        <link href="#{request.contextPath}/resources/imagenes/favicon.ico" rel="shortcut icon"  type="image/x-icon" />
         <title>SysTrack</title>
     </h:head>
 
-    <h:body style="background-color: #27506c;width: 100%;height: 100%;border: none;page: auto; margin-left: 0px; margin-right: 0px;">
-        
-            <p:layout    style="width: 90%;height:720px ;margin-left: auto;margin-right: auto; position:static "  >
-                <p:layoutUnit position="north"  size="80">
-                    <ui:insert name="top"/>
-                </p:layoutUnit>
-                <p:layoutUnit position="center">
-                    <ui:insert name="contenido"/>
-                    <p:growl id="grlMensajes" autoUpdate="true" life="3000" />
-                </p:layoutUnit>
-                <p:layoutUnit position="west" size="300" >
-                    <h:form id="frmMenu">
-                        <p:panelMenu>
-                            <p:submenu label="Usuarios del Sistema">
-                                <p:menuitem value="Administrar" outcome="/Rol/frmAdministracionRol"/>
-                            </p:submenu>
-                            <p:submenu label="Departamentos">
-                                <p:menuitem value="Administrar" outcome="/Departamento/frmAdministracionDepartamento"/>
-                            </p:submenu>
+    <h:body style="background-color: #27506c;width: 100%;height: 100%;border: none;page: auto; margin-left: 0px; margin-right: 0px;margin-bottom: 0px;margin-top: 0px">
 
-                            <p:submenu label="Trámite">
-                                <p:menuitem value="Tipo de trámite" outcome="/Tipo/frmAdministracionTipo"/>
-                            </p:submenu>
-
-                            <p:submenu label="Usuarios">
-                                <p:menuitem value="Administrar" outcome="/Usuario/frmAdministracionUsuarios"/>
-
-                            </p:submenu>
-                        </p:panelMenu>
-                    </h:form>
-                </p:layoutUnit>
-            </p:layout>
+        <p:layout style="width: 90%;height:720px ;min-width: 800px; margin-left: auto;margin-right: auto; position:static "  >
+            <p:layoutUnit position="south" style="border: none;height: 50px;background: transparent" size="50">
+                <p:panel  style="background: transparent;border: none;">
+                    <center>
+                        <h:outputText value="® Derechos de autor GAD Municipal de Tiwintza &amp; " 
+                                      style="color: white;font-size: larger"/>
+                        <h:outputText value="LEWISA.SA" 
+                                      style="color: #2bb673;font-size: larger"/>
+                    </center>
+                </p:panel>
+            </p:layoutUnit>
+            <p:layoutUnit position="north"  size="168" style="background: transparent;border: none">
+                <ui:insert name="top"/>
+                <h:form id="frmCabecera" style=" margin-left: 0px; margin-right: 0px;margin-bottom: 0px;margin-top: 0px">
+                    <p:panel style="height: 80px; margin-left: 0px; margin-right: 0px;margin-bottom: 0px;margin-top: 0px">
+                        <p:graphicImage id="graLogo1" value="/resources/imagenes/logo_systrack.png" 
+                                        style="margin-left: 7%;width: 165px;height: 58.9px;alignment-adjust: auto" onmouseout="achicar1()" onmouseover="agrandar1()"/>
+                        <object align="right" style="margin-right: 200px;margin-top: 7px">
+                            <p:graphicImage   title="Iniciar Sesión" onmouseout="achicar()" onmouseover="agrandar()" id="graLogin1" value="/resources/imagenes/perfil.png" 
+                                              style="width: 50px;height: 50px;cursor: pointer"/>
+                        </object>
+                        <script>
+                            function agrandar() {
+                                document.getElementById("frmCabecera:graLogin1").style.width = "55px";
+                                document.getElementById("frmCabecera:graLogin1").style.height = "55px";
+                            }
+                            function achicar() {
+                                document.getElementById("frmCabecera:graLogin1").style.width = "50px";
+                                document.getElementById("frmCabecera:graLogin1").style.height = "50px";
+                            }
+                            function agrandar1() {
+                                document.getElementById("frmCabecera:graLogo1").style.width = "170px";
+                                document.getElementById("frmCabecera:graLogo1").style.height = "63.9px";
+                            }
+                            function achicar1() {
+                                document.getElementById("frmCabecera:graLogo1").style.width = "165px";
+                                document.getElementById("frmCabecera:graLogo1").style.height = "58.9px";
+                            }
+                        </script>
+                        <object align="right" style="margin-right: -170px;margin-top: 20px">
+                            <h:commandLink action="#{sesionControlador.cerrarSesion()}" value="Cerrar sesión" style=" font-size: medium;color: gray"/>
+                        </object>
+                    </p:panel>
+                    <p:panel style="border: none;background: transparent;margin-top: 25px;height: 30px">
+                        <object style="margin-left: 50px; margin-bottom: 50px">
+                            <h:outputText value="Usuario:" style="color: white; font-size: medium"/>
+                            <p:outputLabel value="#{sesionControlador.dm.sesionUsuarioActual.usuario_nombre} #{sesionControlador.dm.sesionUsuarioActual.usuario_apellido}" style="color: white;font-size: medium;margin-left: 10px"/>
+                        </object>
+                        <hr style="width: 0px;height: 48px;border: none;margin-left: 300px;margin-top: -40px;background-color: transparent;border: 1px dashed gainsboro"/>
+                        <hr style="width: 0px;height: 48px;margin-left: 75%;margin-top: -56px;background-color: transparent;border: 1px dashed gainsboro"/>
+                        <object align="right" style="margin-top: -40px;margin-right: 5%">
+                            <h:outputText value="Tipo de Usuario:" style="color: white; font-size: medium"/>
+                            <h:selectOneMenu value="#{sesionControlador.intIdRol}" style="margin-left: 10px;font-size: medium;background-color: #27506c;color: white">
+                                <f:ajax listener="#{sesionControlador.cambioRol()}"/>
+                                <f:selectItems value="#{sesionControlador.arrLisRolUsuarioAux}"
+                                               var="acciones"
+                                               itemValue="#{acciones.rol_id.rol_id}"
+                                               itemLabel="#{acciones.rol_id.rol_descripcion}"/>
+                            </h:selectOneMenu>
+                        </object>
+                    </p:panel>
+                </h:form>
+            </p:layoutUnit>
+            <p:layoutUnit position="center">
+                <ui:insert name="contenido"/>
+                <p:growl id="grlMensajes" autoUpdate="true" life="3000" />
+            </p:layoutUnit>
+            <p:layoutUnit position="west" size="300" >
+                <h:form id="frmMenu">
+                    <p:panelMenu model="#{menuControlador.objMenuModel}">
+                    </p:panelMenu>
+                </h:form>
+            </p:layoutUnit>
+        </p:layout>
         <ui:insert name="dialogos"/>
     </h:body>
 

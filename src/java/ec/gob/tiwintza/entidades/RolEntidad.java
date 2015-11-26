@@ -10,8 +10,10 @@ package ec.gob.tiwintza.entidades;
  * @author eborja
  */
 public class RolEntidad {
+
     private long rol_id;
     private String rol_descripcion;
+
     //<editor-fold defaultstate="collapsed" desc="Sets y Gets">
     /**
      * @return the rol_id
@@ -53,6 +55,10 @@ public class RolEntidad {
     public RolEntidad(long rol_id, String rol_descripcion) {
         this.rol_id = rol_id;
         this.rol_descripcion = rol_descripcion;
+    }
+
+    public RolEntidad(long rol_id) {
+        this.rol_id = rol_id;
     }
     //</editor-fold>
 }

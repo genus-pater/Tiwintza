@@ -141,6 +141,10 @@ public class UsuarioEntidad {
         this.usuario_cuenta = usuario_cuenta;
         this.usuario_email = usuario_email;
     }
+
+    public UsuarioEntidad(long usuario_id) {
+        this.usuario_id = usuario_id;
+    }
     //</editor-fold>
 
 }

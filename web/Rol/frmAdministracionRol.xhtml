@@ -25,10 +25,10 @@
                 </h:form>
             </p:fieldset><br/>
             <p:panel>
-                <h:outputText value="Administración de Usuarios del Sistem" style="margin-left: 5%;" />
+                <h:outputText value="Administración de Usuarios del Sistema" style="margin-left: 5%;" />
                 <p:separator />
                 <h:form id="frmRol">
-                    <p:dataTable id="datRol" value="#{rolControlador.arrLisRol}" var="rol" paginator="true" rows="10"
+                    <p:dataTable  id="datRol" value="#{rolControlador.arrLisRol}" var="rol" paginator="true" rows="10" 
                                  selectionMode="single" selection="#{rolControlador.objSelRol}" rowKey="#{rol.rol_id}" 
                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
                                  rowsPerPageTemplate="5,10,15" rendered="#{rolControlador.arrLisRol.size() > 0 eq true}" emptyMessage="Sin Registros">
