@@ -8,6 +8,10 @@ package ec.gob.tiwintza.controladores;
 import ec.edu.espoch.sga.recursos.Util;
 import ec.gob.tiwintza.entidades.UsuarioEntidad;
 import ec.gob.tiwintza.modelos.UsuarioModelo;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Map;
 import javax.annotation.PostConstruct;
@@ -91,6 +95,15 @@ public class UsuarioControlador {
 
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Funciones">
+    public String encryptPassword(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+
+        MessageDigest crypt = MessageDigest.getInstance("SHA-512");
+        crypt.reset();
+        crypt.update(password.getBytes("UTF-8"));
+
+        return new BigInteger(1, crypt.digest()).toString(16);
+    }
+
     public void cargarUsuario() {
         try {
             this.arrLisUsuario = UsuarioModelo.obtenerUsuario();
@@ -98,9 +111,19 @@ public class UsuarioControlador {
             System.err.println("e" + e.getMessage());
         }
     }
+    
+    public String comprobarClave(String strClave){
+        if(strClave.length()<128){
+            return "0"+strClave;
+        }else
+            return strClave;
+    }
 
     public void insertarUsuario() {
         try {
+            String strEncryptPass=encryptPassword(objUsuario.getUsuario_password());
+            strEncryptPass=comprobarClave(strEncryptPass);
+            objUsuario.setUsuario_password(strEncryptPass);
             if (UsuarioModelo.insertarUsuario(objUsuario)) {
                 Util.addSuccessMessage("Se ingreso un nuevo USUARIO");
             } else {
@@ -131,6 +154,9 @@ public class UsuarioControlador {
 
     public void actualizarUsuario() {
         try {
+            String strEncryptPass=encryptPassword(objSelUsuario.getUsuario_password());
+            strEncryptPass=comprobarClave(strEncryptPass);
+            objSelUsuario.setUsuario_password(strEncryptPass);
             FacesContext fc = FacesContext.getCurrentInstance();
             Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
             long lonIdUsuarioEliminar = Long.parseLong(params.get("prmIdUsuarioActualizar"));

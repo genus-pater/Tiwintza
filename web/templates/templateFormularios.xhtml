@@ -36,7 +36,7 @@
                         <p:graphicImage id="graLogo1" value="/resources/imagenes/logo_systrack.png" 
                                         style="margin-left: 7%;width: 165px;height: 58.9px;alignment-adjust: auto" onmouseout="achicar1()" onmouseover="agrandar1()"/>
                         <object align="right" style="margin-right: 200px;margin-top: 7px">
-                            <p:graphicImage   title="Iniciar Sesión" onmouseout="achicar()" onmouseover="agrandar()" id="graLogin1" value="/resources/imagenes/perfil.png" 
+                            <p:graphicImage   title="Sesión" onmouseout="achicar()" onmouseover="agrandar()" id="graLogin1" value="/resources/imagenes/perfil.png" 
                                               style="width: 50px;height: 50px;cursor: pointer"/>
                         </object>
                         <script>
@@ -56,9 +56,14 @@
                                 document.getElementById("frmCabecera:graLogo1").style.width = "165px";
                                 document.getElementById("frmCabecera:graLogo1").style.height = "58.9px";
                             }
+
+                            function deleteCookies() {
+                                document.cookie = 'user=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC';
+                                document.cookie = 'pass=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC';
+                            }
                         </script>
                         <object align="right" style="margin-right: -170px;margin-top: 20px">
-                            <h:commandLink action="#{sesionControlador.cerrarSesion()}" value="Cerrar sesión" style=" font-size: medium;color: gray"/>
+                            <h:commandLink onclick="deleteCookies()" action="#{sesionControlador.cerrarSesion()}" value="Cerrar sesión" style=" font-size: medium;color: gray"/>
                         </object>
                     </p:panel>
                     <p:panel style="border: none;background: transparent;margin-top: 25px;height: 30px">

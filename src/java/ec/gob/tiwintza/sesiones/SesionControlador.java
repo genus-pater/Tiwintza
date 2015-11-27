@@ -11,6 +11,10 @@ import ec.gob.tiwintza.entidades.UsuarioEntidad;
 import ec.gob.tiwintza.modelos.RolUsuarioModelo;
 import ec.gob.tiwintza.modelos.UsuarioModelo;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Map;
 import javax.faces.bean.ManagedBean;
@@ -18,6 +22,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -127,10 +132,36 @@ public class SesionControlador {
         this.Destroy();
         return "/index?faces-redirect=true";
     }
+    
+    public String comprobarClave(String strClave){
+        if(strClave.length()<128){
+            return "0"+strClave;
+        }else
+            return strClave;
+    }
+
+    public String encryptPassword(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+
+        MessageDigest crypt = MessageDigest.getInstance("SHA-512");
+        crypt.reset();
+        crypt.update(password.getBytes("UTF-8"));
+
+        return new BigInteger(1, crypt.digest()).toString(16);
+    }
 
     public String login() throws Exception {
         try {
-            String strQuery = "call bd_st.pr_select_usuario_sesion(\"" + objUsuario.getUsuario_cuenta() + "\",\"" + objUsuario.getUsuario_password() + "\")";
+            String strEncryptPass = encryptPassword(objUsuario.getUsuario_password());
+            strEncryptPass=comprobarClave(strEncryptPass);
+            Map<String, Object> cookies = FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap();
+            Cookie cooUserSesion = (Cookie) cookies.get("user");
+            Cookie cooPassSesion = (Cookie) cookies.get("pass");
+            if (cooPassSesion != null && cooUserSesion != null) {
+                if (!(cooPassSesion.getValue().equals(strEncryptPass) && cooUserSesion.getValue().equals(objUsuario.getUsuario_cuenta()))) {
+                    RequestContext.getCurrentInstance().execute("{deleteCookies()}");
+                }
+            }
+            String strQuery = "call bd_st.pr_select_usuario_sesion(\"" + objUsuario.getUsuario_cuenta() + "\",\"" + strEncryptPass + "\")";
             ArrayList<UsuarioEntidad> arrListAux = UsuarioModelo.obtenerUsuario(strQuery);
             UsuarioEntidad objUsuarioAux = arrListAux.get(0);
             strQuery = "call bd_st.pr_select_rol_usuario_sesion(\"" + objUsuarioAux.getUsuario_id() + "\")";
@@ -140,6 +171,7 @@ public class SesionControlador {
             return "/templates/templateFormularios?faces-redirect=true";
         } catch (Exception e) {
             Util.addErrorMessage("Usuario o contraseña INCORRECTAS");
+            RequestContext.getCurrentInstance().execute("{reiniciarCookies()}");
             return null;
         }
     }
@@ -159,9 +191,8 @@ public class SesionControlador {
             this.dm.setSesionUsuarioActual(objUsuarioAux);
             this.dm.setSesionRolUsuarioActual(getArrLisRolUsuarioAux().get(0));
             FacesContext.getCurrentInstance().getExternalContext().redirect("/Tiwintza/faces/templates/templateFormularios.xhtml");
-//            
         } catch (Exception e) {
-            int kk = 0;
+
         }
     }
 
