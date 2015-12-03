@@ -12,13 +12,13 @@
         <h:outputStylesheet name="./css/cssLayout.css"/>
         <h:outputStylesheet name="./css/default.css"/>
         <h:outputScript library="js" name="jsfcrud.js"/>
-        <link href="#{request.contextPath}/resources/imagenes/favicon.ico" rel="shortcut icon"  type="image/x-icon" />
+        <link href="#{request.contextPath}/resources/imagenes/logo_systrack_s.ico" rel="shortcut icon"  type="image/x-icon" />
         <title>SysTrack</title>
     </h:head>
 
     <h:body style="background-color: #27506c;width: 100%;height: 100%;border: none;page: auto; margin-left: 0px; margin-right: 0px;margin-bottom: 0px;margin-top: 0px">
 
-        <p:layout style="width: 90%;height:720px ;min-width: 800px; margin-left: auto;margin-right: auto; position:static "  >
+        <p:layout style="width: 90%;height:720px ;min-width: 1050px; margin-left: auto;margin-right: auto; position:static "  >
             <p:layoutUnit position="south" style="border: none;height: 50px;background: transparent" size="50">
                 <p:panel  style="background: transparent;border: none;">
                     <center>
@@ -33,13 +33,20 @@
                 <ui:insert name="top"/>
                 <h:form id="frmCabecera" style=" margin-left: 0px; margin-right: 0px;margin-bottom: 0px;margin-top: 0px">
                     <p:panel style="height: 80px; margin-left: 0px; margin-right: 0px;margin-bottom: 0px;margin-top: 0px">
-                        <p:graphicImage id="graLogo1" value="/resources/imagenes/logo_systrack.png" 
-                                        style="margin-left: 7%;width: 165px;height: 58.9px;alignment-adjust: auto" onmouseout="achicar1()" onmouseover="agrandar1()"/>
+                        <a href="#{request.contextPath}/faces/templates/templateFormularios.xhtml"><p:graphicImage title="Inicio" id="graLogo1" value="/resources/imagenes/logo_systrack.png" 
+                                                                                                                   style="cursor: pointer; margin-left: 7%;width: 165px;height: 58.9px;alignment-adjust: auto" onmouseout="achicar1()" onmouseover="agrandar1()"/></a>
                         <object align="right" style="margin-right: 200px;margin-top: 7px">
                             <p:graphicImage   title="Sesión" onmouseout="achicar()" onmouseover="agrandar()" id="graLogin1" value="/resources/imagenes/perfil.png" 
                                               style="width: 50px;height: 50px;cursor: pointer"/>
+                            <p:tieredMenu trigger="graLogin1" overlay="true" my="left top" at="left bottom"
+                                          style="background-color: #6d6d6d;border: none">
+                                <p:menuitem outcome="/Perfil/frmAdministracionPerfil.xhtml" value="Perfil" icon="ui-icon-person" style="color: white"/>
+                                <p:menuitem value="Salir" icon="ui-icon-power" style="color: white"
+                                            onclick="deleteCookies()" action="#{sesionControlador.cerrarSesion()}"/>
+                            </p:tieredMenu>
                         </object>
                         <script>
+
                             function agrandar() {
                                 document.getElementById("frmCabecera:graLogin1").style.width = "55px";
                                 document.getElementById("frmCabecera:graLogin1").style.height = "55px";
@@ -66,10 +73,10 @@
                             <h:commandLink onclick="deleteCookies()" action="#{sesionControlador.cerrarSesion()}" value="Cerrar sesión" style=" font-size: medium;color: gray"/>
                         </object>
                     </p:panel>
-                    <p:panel style="border: none;background: transparent;margin-top: 25px;height: 30px">
+                    <p:panel id="pnlSesion" style="border: none;background: transparent;margin-top: 25px;height: 30px">
                         <object style="margin-left: 50px; margin-bottom: 50px">
                             <h:outputText value="Usuario:" style="color: white; font-size: medium"/>
-                            <p:outputLabel value="#{sesionControlador.dm.sesionUsuarioActual.usuario_nombre} #{sesionControlador.dm.sesionUsuarioActual.usuario_apellido}" style="color: white;font-size: medium;margin-left: 10px"/>
+                            <h:outputLabel value="#{sesionControlador.nombreApellido()}" id="outSesion" style="color: white;font-size: medium;margin-left: 10px;"/>
                         </object>
                         <hr style="width: 0px;height: 48px;border: none;margin-left: 300px;margin-top: -40px;background-color: transparent;border: 1px dashed gainsboro"/>
                         <hr style="width: 0px;height: 48px;margin-right: 350px;margin-top: -56px;background-color: transparent;border: 1px dashed gainsboro"/>
@@ -87,6 +94,8 @@
                 </h:form>
             </p:layoutUnit>
             <p:layoutUnit position="center">
+                <p:graphicImage  rendered="#{request.requestURI == '/Tiwintza/faces/templates/templateFormularios.xhtml'}" value="/resources/imagenes/logo_fondo.png"
+                                 style="max-width: 100%;max-height: 100%; position: absolute;top: 50%;left: 50%; transform: translate(-50%,-50%)"/>
                 <ui:insert name="contenido"/>
                 <p:growl id="grlMensajes" autoUpdate="true" life="3000" />
             </p:layoutUnit>

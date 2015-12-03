@@ -173,6 +173,16 @@ public class SesionControlador {
             return null;
         }
     }
+    
+    
+
+    public String nombreApellido() {
+        String strAux = dm.getSesionUsuarioActual().getUsuario_nombre() + " " + dm.getSesionUsuarioActual().getUsuario_apellido();
+        if (strAux.length() >= 22) {
+            strAux = strAux.substring(0, 20).concat("...");
+        }
+        return strAux;
+    }
 
     public void keepMeLogued() {
         try {

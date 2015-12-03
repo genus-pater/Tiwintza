@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/templates/templateFormularios.xhtml">
+        <ui:define name="top">
+        </ui:define>
+
+        <ui:define name="contenido">
+            <h:form id="frmPerfil">
+                <br/><p:graphicImage value="/resources/imagenes/sesion.png" style="width: 50px;height: 50px;margin-left: 5%;margin-bottom: -12px"/>
+                <h:outputText value="#{sesionControlador.dm.sesionUsuarioActual.usuario_nombre} #{sesionControlador.dm.sesionUsuarioActual.usuario_apellido} - #{sesionControlador.dm.sesionUsuarioActual.usuario_cuenta}" 
+                              style="font-size: xx-large;margin-left: 30px;"/>
+                <p:separator style="border-color: #8c8c8c;margin-left: 5.1%;margin-right: 15%;margin-top: 12px;margin-bottom: 15px"/>
+                <h:outputText  value="DETALLES DE LA CUENTA" style="color: #a8a8a8;margin-left: 5%;font-size: large;font-weight: 600"/>
+                <p:panel style="margin-left: 290px;border: none;margin-top: -30px;margin-right: 14.5%">
+                    <h:outputText value="#{sesionControlador.dm.sesionUsuarioActual.usuario_nombre} #{sesionControlador.dm.sesionUsuarioActual.usuario_apellido}"
+                                  style="font-size: medium;font-weight: 600"/>
+                    <object align="right" >
+                        <p:commandLink action="#{perfilControlador.actualizarSesion()}" onclick="PF('wgActualizarNombre').show()" value="Cambiar nombre" style="font-size: larger;color: #eb9b0c;font-weight: lighter"/>
+                    </object><br/>
+                    <br/><h:outputText value="#{sesionControlador.dm.sesionUsuarioActual.usuario_cedula}"
+                                       style="font-size: medium;font-weight: 600"/>
+                    <object align="right" >
+                        <p:commandLink onclick="PF('wgActualizarCedula').show()" value="Cambiar cédula" style="font-size: larger;color: #eb9b0c;font-weight: lighter"/>
+                    </object><br/>
+                    <br/><h:outputText value="#{sesionControlador.dm.sesionUsuarioActual.usuario_email}"
+                                       style="font-size: medium;font-weight: 600;"/>
+                    <object align="right">
+                        <p:commandLink onclick="PF('wgActualizarEmail').show()" value="Cambiar e-mail" style="font-size: larger;color: #eb9b0c;font-weight: lighter"/>
+                    </object><br/>
+                    <br/><h:outputText value="**********"
+                                       style="font-size: medium;font-weight: 600;"/>
+                    <object align="right" >
+                        <p:commandLink onclick="PF('wgActualizarPassword').show()" value="Cambiar contraseña" style="font-size: larger;color: #eb9b0c;font-weight: lighter"/>
+                    </object><br/>
+                    <p:separator style="border-color: #8c8c8c;margin-top: 12px;margin-bottom: 15px"/>
+                </p:panel>
+                <br/><center><p:graphicImage value="/resources/imagenes/logo_systrack_sc.png"
+                                             style="max-width: 30%;max-height: 30%; position: absolute"/></center>
+            </h:form>
+        </ui:define>
+
+        <ui:define name="dialogos">
+            <p:dialog id="dlgActualizarEmail" widgetVar="wgActualizarEmail" header="Actualizar Email" 
+                      modal="true"  resizable="false"
+                      showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
+                      width="700" height="400">  
+                <h:form id="frmActualizarEmail">
+                    <p:panel id="pnlRolActualizarEmail" style="width: 660px; height: 390px;">
+                        <br/><br/><br/><br/>
+                        <p:outputLabel value="E-mail:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputText style="width: 40%;height: 25px; margin-left: 5%"
+                                     required="true" value="#{sesionControlador.dm.sesionUsuarioActual.usuario_email}"
+                                     validatorMessage="Formato de e-mail INCORRECTO ">
+                            <f:validateRegex
+                            pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                        </p:inputText><br/><br/><br/>
+                        <p:commandButton style="width: 43%;margin-left: 5%;margin-top: 80px" value="Actualizar"
+                                         update=":frmPerfil :frmActualizarEmail pnlRolActualizarEmail" onclick="PF('wgActualizarEmail').hide()"
+                                         action="#{perfilControlador.actualizarPerfil()}">
+                        </p:commandButton> 
+                    </p:panel>
+                </h:form> 
+            </p:dialog>
+            
+            <p:dialog id="dlgActualizarNombre" widgetVar="wgActualizarNombre" header="Actualizar Nombres" 
+                      modal="true"  resizable="false"
+                      showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
+                      width="700" height="400">  
+                <h:form id="frmActualizarNombre">
+                    <p:panel id="pnlRolActualizarNombre" style="width: 660px; height: 390px;">
+                        <br/><br/>
+                        <p:outputLabel value="Nombres:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputText style="width: 40%;height: 25px; margin-left: 5%"
+                                     required="true" value="#{sesionControlador.dm.sesionUsuarioActual.usuario_nombre}"/><br/><br/><br/>
+                        <p:outputLabel value="Apellidos:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputText style="width: 40%;height: 25px; margin-left: 5%"
+                                     required="true" value="#{sesionControlador.dm.sesionUsuarioActual.usuario_apellido}"/><br/><br/><br/>
+                        <p:commandButton style="width: 43%;margin-left: 5%;margin-top: 40px" value="Actualizar"
+                                         update=":frmPerfil :frmActualizarNombre pnlRolActualizarNombre :frmCabecera" onclick="PF('wgActualizarNombre').hide()"
+                                         action="#{perfilControlador.actualizarPerfil()}">
+                        </p:commandButton> 
+                    </p:panel>
+                </h:form> 
+            </p:dialog>
+            <p:dialog id="dlgActualizarCedula" widgetVar="wgActualizarCedula" header="Actualizar Cédula" 
+                      modal="true"  resizable="false"
+                      showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
+                      width="700" height="400">  
+                <h:form id="frmActualizarCedula">
+                    <p:panel id="pnlRolActualizarCedula" style="width: 660px; height: 390px;">
+                        <br/><br/><br/><br/>
+                        <p:outputLabel value="Cedula:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputMask mask="999999999-9" style="width: 40%;height: 25px; margin-left: 5%"
+                                     required="true" value="#{sesionControlador.dm.sesionUsuarioActual.usuario_cedula}"/><br/><br/><br/>
+                        <p:commandButton style="width: 43%;margin-left: 5%;margin-top: 80px" value="Actualizar"
+                                         update=":frmPerfil :frmActualizarCedula pnlRolActualizarCedula" onclick="PF('wgActualizarCedula').hide()"
+                                         action="#{perfilControlador.actualizarPerfil()}">
+                        </p:commandButton> 
+                    </p:panel>
+                </h:form> 
+            </p:dialog>
+            <p:dialog id="dlgActualizarPassword" widgetVar="wgActualizarPassword" header="Actualizar Contraseña" 
+                      modal="true"  resizable="false"
+                      showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
+                      width="700" height="400">  
+                <h:form id="frmActualizarPassword">
+                    <p:panel id="pnlRolActualizarPassword" style="width: 660px; height: 390px;">
+                        <br/>
+                        <p:outputLabel value="Contraseña actual:" style="margin-left: 5%"/><br/><br/>
+                        <p:password placeholder="Contraseña actual" style="width: 40%;height: 25px; margin-left: 5%"
+                                    required="true" value="#{perfilControlador.strPasswordActual}"
+                                    requiredMessage="Ingrese la CONTRASEÑA"/><br/><br/>
+                        <p:outputLabel value="Contraseña nueva:" style="margin-left: 5%"/><br/><br/>
+                        <p:password id="pwd1" placeholder="Contraseña nueva" feedback="true" weakLabel="Debil" strongLabel="Fuerte"
+                                    goodLabel="Buena" promptLabel="Contreseña" style="width: 40%;height: 25px; margin-left: 5%"
+                                    match="pwd2"  required="true" value="#{perfilControlador.strPasswordNueva}"
+                                    requiredMessage="Ingrese la CONTRASEÑA"/><br/><br/>
+                        <p:outputLabel value="Confirmar contraseña nueva:" style="margin-left: 5%"/><br/><br/>
+                        <p:password id="pwd2" placeholder="Confirmar contraseña nueva"  weakLabel="Debil" 
+                                    style="width: 40%;height: 25px; margin-left: 5%"
+                                    required="true" value="#{perfilControlador.strConfirmarPasswordNueva}"
+                                    requiredMessage="Ingrese la CONTRASEÑA"/><br/>
+                        <p:commandButton style="width: 43%;margin-left: 5%;margin-top: 20px" value="Actualizar"
+                                         update=":frmPerfil :frmActualizarPassword pnlRolActualizarPassword" onclick="PF('wgActualizarPassword').hide()"
+                                         action="#{perfilControlador.actualizarPassword()}">
+                        </p:commandButton> 
+                    </p:panel>
+                </h:form> 
+            </p:dialog>
+        </ui:define>
+
+    </ui:composition>
+</html>
+

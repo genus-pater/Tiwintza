@@ -8,7 +8,6 @@ package ec.gob.tiwintza.controladores;
 import ec.edu.espoch.sga.recursos.Util;
 import ec.gob.tiwintza.entidades.TipoEntidad;
 import ec.gob.tiwintza.modelos.TipoModelo;
-import ec.gob.tiwintza.modelos.TipoModelo;
 import java.util.ArrayList;
 import java.util.Map;
 import javax.annotation.PostConstruct;

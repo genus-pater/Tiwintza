@@ -6,7 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
-        <link href="#{request.contextPath}/resources/imagenes/favicon.ico" rel="shortcut icon"  type="image/x-icon" />
+        <link href="#{request.contextPath}/resources/imagenes/logo_systrack_s.ico" rel="shortcut icon"  type="image/x-icon" />
         <title>SysTrack</title>
     </h:head>
     <h:body  onload="#{sesionControlador.keepMeLogued()}" style="background-color: #27506c;width: 100%;height:100% ;border: none;page: auto; margin-left: 0px; margin-right: 0px;margin-bottom: 0px;margin-top: 0px">
@@ -14,9 +14,10 @@
         <p:layout   style="width: 90%;height: 700px; margin-left: auto;margin-right: auto; position:static;border: none ">
             <p:layoutUnit position="north" style="border: none;height: 80px" size="80">
                 <p:graphicImage id="graLogo" value="/resources/imagenes/logo_systrack.png" 
-                                style="margin-left: 7%;width: 165px;height: 58.9px;alignment-adjust: auto" onmouseout="achicar1()" onmouseover="agrandar1()"/>
-                <object align="right"><p:graphicImage  onclick="PF('wgLogin').show()" title="Iniciar Sesión" onmouseout="achicar()" onmouseover="agrandar()" id="graLogin" value="/resources/imagenes/perfil.png" 
-                                                       style="width: 50px;height: 50px;alignment-adjust: auto;cursor: pointer;margin-left: -150%"/></object> 
+                                style="margin-left: 7%;width: 165px;height: 58.9px;alignment-adjust: auto" onmouseout="achicar1()" onmouseover="agrandar1()"/>                
+                <object align="right"><p:graphicImage onclick="PF('wgLogin').show()" title="Iniciar Sesión" onmouseout="achicar()" onmouseover="agrandar()" id="graLogin" value="/resources/imagenes/perfil.png" 
+                                                       style="width: 50px;height: 50px;alignment-adjust: auto;cursor: pointer;margin-left: -150%"/>
+                </object> 
                 <script>
                     function agrandar() {
                         document.getElementById("graLogin").style.width = "55px";
@@ -364,10 +365,12 @@
                             }
                             else if (bolLogin.checked) {
                                 document.getElementById("frmLogin:booLogin").value = "false";
+                                deleteCookies();
                             }
                         }
                         else if (bolLogin.checked) {
                             document.getElementById("frmLogin:booLogin").value = "false";
+                            deleteCookies();
                         }
                     }
 

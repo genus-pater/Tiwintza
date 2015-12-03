@@ -8,9 +8,7 @@ package ec.gob.tiwintza.modelos;
 import ec.gob.tiwintza.accesodatos.AccesoDatos;
 import ec.gob.tiwintza.accesodatos.ConjuntoResultado;
 import ec.gob.tiwintza.accesodatos.Parametro;
-import ec.gob.tiwintza.entidades.TipoEntidad;
 import ec.gob.tiwintza.entidades.UsuarioEntidad;
-import static ec.gob.tiwintza.modelos.TipoModelo.llenarTipo;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -31,6 +29,18 @@ public class UsuarioModelo {
         arrLisParametros.add(new Parametro(5, objUsuarioActualizar.getUsuario_cuenta()));
         arrLisParametros.add(new Parametro(6, objUsuarioActualizar.getUsuario_password()));
         arrLisParametros.add(new Parametro(7, objUsuarioActualizar.getUsuario_email()));
+        ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strQuery, arrLisParametros);
+        while (conResultado.next()) {
+            intResultado = conResultado.getInt(0);
+        }
+        return intResultado;
+    }
+    public static int actualizarUsuarioPassword(UsuarioEntidad objUsuarioActualizar) throws Exception {
+        int intResultado = 0;
+        String strQuery = "select bd_st.fn_update_password(?,?)";
+        ArrayList<Parametro> arrLisParametros = new ArrayList<>();
+        arrLisParametros.add(new Parametro(1, objUsuarioActualizar.getUsuario_id()));
+        arrLisParametros.add(new Parametro(2, objUsuarioActualizar.getUsuario_password()));
         ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strQuery, arrLisParametros);
         while (conResultado.next()) {
             intResultado = conResultado.getInt(0);
