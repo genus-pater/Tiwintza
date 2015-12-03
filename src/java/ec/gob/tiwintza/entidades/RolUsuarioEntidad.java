@@ -70,7 +70,13 @@ public class RolUsuarioEntidad {
     }
 
     public RolUsuarioEntidad() {
+        this.usuario_id=new UsuarioEntidad();
+        this.rol_id=new RolEntidad();
+    }
+
+    public RolUsuarioEntidad(UsuarioEntidad usuario_id, RolEntidad rol_id) {
+        this.usuario_id = usuario_id;
+        this.rol_id = rol_id;
     }
     //</editor-fold>
-
 }

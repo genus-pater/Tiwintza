@@ -3,10 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/eborja/NetBeansProjects/Tiwintza/src/java/ec/gob/tiwintza/modelos/UsuarioModelo.java</file>
-            <file>file:/home/eborja/NetBeansProjects/Tiwintza/web/Perfil/frmAdministracionPerfil.xhtml</file>
+            <file>file:/home/eborja/NetBeansProjects/Tiwintza/src/java/ec/gob/tiwintza/sesiones/SesionControlador.java</file>
             <file>file:/home/eborja/NetBeansProjects/Tiwintza/web/templates/templateFormularios.xhtml</file>
-            <file>file:/home/eborja/NetBeansProjects/Tiwintza/src/java/ec/gob/tiwintza/sesiones/PerfilControlador.java</file>
+            <file>file:/home/eborja/NetBeansProjects/Tiwintza/web/RolUsuario/frmAdministracionRolUsuario.xhtml</file>
+            <file>file:/home/eborja/NetBeansProjects/Tiwintza/src/java/ec/gob/tiwintza/controladores/RolUsuarioControlador.java</file>
         </group>
     </open-files>
 </project-private>

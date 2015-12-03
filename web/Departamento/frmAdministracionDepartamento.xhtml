@@ -19,7 +19,7 @@
                                  placeholder="Nombre" id="inpNombre" 
                                  value="#{departamentoControlador.objDepartamento.departamento_nombre}" 
                                  style="width: 30%;height: 25px; margin-left: 5%"/><br/><br/>
-                    <br/><h:outputText value="Descripción:" style="margin-left: 5%"/><br/><br/>
+                    <h:outputText value="Descripción:" style="margin-left: 5%"/><br/><br/>
                     <p:inputTextarea counter="displayIngreso" counterTemplate="{0}" maxlength="100" requiredMessage="Ingrese la DESCRIPCIÓN" required="true" 
                                  placeholder="Descripción" id="inpDescripcion" 
                                  value="#{departamentoControlador.objDepartamento.departamento_descripcion}" 
@@ -72,7 +72,7 @@
 
         <ui:define name="dialogos">
             <p:dialog id="dlgEliminarDepartamento" widgetVar="wgEliminarDepartamento" header="Eliminar Departamentos" 
-                      modal="true" closable="false" resizable="false"
+                      modal="true"  resizable="false"
                       showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
                       width="700" height="400">  
                 <h:form id="frmEliminarDepartamento">
@@ -96,7 +96,7 @@
             </p:dialog>
 
             <p:dialog id="dlgActualizarDepartamento" widgetVar="wgActualizarDepartamento" header="Actualizar Departamentos" 
-                      modal="true" closable="false" resizable="false"
+                      modal="true"  resizable="false"
                       showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
                       width="700" height="400">  
                 <h:form id="frmActualizarDepartamento">

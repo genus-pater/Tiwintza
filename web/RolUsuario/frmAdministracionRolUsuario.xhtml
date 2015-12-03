@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/templates/templateFormularios.xhtml">
+        <ui:define name="top">
+        </ui:define>
+
+        <ui:define name="contenido">
+            <p:fieldset legend="Crear" toggleable="true" toggleSpeed="500" collapsed="true">
+                <h:outputText value="Registro de Roles de Usuario" style="margin-left: 5%;"/>
+                <p:separator />
+                <h:form id="frmIngresoRolUsuario">
+                    <br/><h:outputText value="Usuario:" style="margin-left: 5%"/><br/><br/>
+                    <h:selectOneMenu style="margin-left: 5%;color: #546380;font-size: 14px;background: transparent;height: 25px"  
+                                     id="selUsuario" required="true" requiredMessage="Seleccione un USUARIO" 
+                                     value="#{rolUsuarioControlador.objRolUsuario.usuario_id.usuario_id}">
+                        <f:selectItems value="#{usuarioControlador.arrLisUsuario}"
+                                       var="usuario"
+                                       itemValue="#{usuario.usuario_id}"
+                                       itemLabel="#{usuario.usuario_nombre} #{usuario.usuario_apellido}"/>
+                    </h:selectOneMenu><br/><br/>
+                    <h:outputText value="Rol:" style="margin-left: 5%"/><br/><br/>
+                    <h:selectOneMenu style="margin-left: 5%;color: #546380;font-size: 14px;background: transparent;height: 25px"  
+                                     id="selRol" required="true" requiredMessage="Seleccione un ROL" value="#{rolUsuarioControlador.objRolUsuario.rol_id.rol_id}">
+                        <f:selectItems value="#{rolControlador.arrLisRol}"
+                                       var="rol"
+                                       itemValue="#{rol.rol_id}"
+                                       itemLabel="#{rol.rol_descripcion}"/>
+                    </h:selectOneMenu><br/><br/>
+                    <p:commandButton id="btnIngresoRolUsuario" style="width: 32%;margin-left: 5%" value="Registrar" 
+                                     update=":frmIngresoRolUsuario :frmRolUsuario :frmCabecera :frmMenu"
+                                     oncomplete="handleSubmitMenu(args,'frmIngresoRolUsuario');"
+                                     action="#{rolUsuarioControlador.insertarRolUsuario()}"/>
+                </h:form>
+            </p:fieldset><br/>
+            <p:panel>
+                <h:outputText value="Administración de Asignación de Roles" style="margin-left: 5%;" />
+                <p:separator />
+                <h:form id="frmRolUsuario">
+                    <p:dataTable  id="datRolUsuario" value="#{rolUsuarioControlador.arrLisRolUsuario}" var="rolUsuario" paginator="true" rows="10" 
+                                  selectionMode="single" selection="#{rolUsuarioControlador.objSelRolUsuario}" rowKey="#{rolUsuario.usuario_id.usuario_id} #{rolUsuario.rol_id.rol_id}" 
+                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                  rowsPerPageTemplate="5,10,15" rendered="#{rolUsuarioControlador.arrLisRolUsuario.size() > 0 eq true}" emptyMessage="Sin Registros">
+                        <p:column headerText="Usuario">
+                            <h:outputText value="#{rolUsuario.usuario_id.usuario_nombre} #{rolUsuario.usuario_id.usuario_apellido}"/>
+                        </p:column>
+                        <p:column headerText="Rol">
+                            <h:outputText value="#{rolUsuario.rol_id.rol_descripcion}"/>
+                        </p:column>
+                        <p:column style="width:80px;text-align: center" >
+                            <p:panelGrid columns="2">
+                                <p:column>
+                                    <p:commandLink styleClass="ui-icon ui-icon-pencil" process="@this"
+                                                   oncomplete="PF('wgActualizarRolUsuario').show()"
+                                                   update=":dlgActualizarRolUsuario @parent">   
+                                        <f:param name="idRolRespaldo" value="#{rolUsuario.rol_id.rol_id}"/>
+                                        <f:setPropertyActionListener value="#{rolUsuario}" target="#{rolUsuarioControlador.objSelRolUsuario}"/>
+                                    </p:commandLink>
+                                </p:column>
+                                <p:column >
+                                    <p:commandLink  styleClass="ui-icon ui-icon-trash" process="@this"
+                                                    oncomplete="PF('wgEliminarRolUsuario').show()"
+                                                    update=":dlgEliminarRolUsuario @parent">  
+                                        <f:setPropertyActionListener value="#{rolUsuario}" target="#{rolUsuarioControlador.objSelRolUsuario}"/>
+                                    </p:commandLink>
+                                </p:column>
+                            </p:panelGrid>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:panel>
+        </ui:define>
+
+        <ui:define name="dialogos">
+            <p:dialog id="dlgEliminarRolUsuario" widgetVar="wgEliminarRolUsuario" header="Eliminar la asginación de un Rol" 
+                      modal="true" resizable="false"
+                      showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
+                      width="700" height="400">  
+                <h:form id="frmEliminarRolUsuario">
+                    <p:panel id="pnlRolUsuarioEliminar" style="width: 660px; height: 390px;">
+                        <br/><br/><p:outputLabel value="Usuario:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputText disabled="true" style="width: 40%;height: 25px; margin-left: 5%"
+                                     value="#{rolUsuarioControlador.objSelRolUsuario.usuario_id.usuario_nombre} #{rolUsuarioControlador.objSelRolUsuario.usuario_id.usuario_apellido}"/><br/><br/>
+                        <p:outputLabel value="Rol:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputText disabled="true" style="width: 40%;height: 25px; margin-left: 5%"
+                                     value="#{rolUsuarioControlador.objSelRolUsuario.rol_id.rol_descripcion}"/><br/><br/><br/>
+                        <p:commandButton action="#{rolUsuarioControlador.eliminarRolUsuario()}" 
+                                         style="width: 43%;margin-left: 5%" value="Eliminar"
+                                         update=":frmRolUsuario :frmEliminarRolUsuario pnlRolUsuarioEliminar :frmCabecera :frmMenu" onclick="PF('wgEliminarRolUsuario').hide()">
+                            <f:param name="prmIdUsuarioEliminar" id="prmIdUsuarioEliminar" value="#{rolUsuarioControlador.objSelRolUsuario.usuario_id.usuario_id}"/>
+                            <f:param name="prmIdRolEliminar" id="prmIdRolEliminar" value="#{rolUsuarioControlador.objSelRolUsuario.rol_id.rol_id}"/>
+                        </p:commandButton> 
+                    </p:panel>
+                </h:form> 
+            </p:dialog>
+
+            <p:dialog id="dlgActualizarRolUsuario" widgetVar="wgActualizarRolUsuario" header="Actualizar Usuarios del Sistema" 
+                      modal="true"  resizable="false"
+                      showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
+                      width="700" height="400">  
+                <h:form id="frmActualizarRolUsuario">
+                    <p:panel id="pnlRolUsuarioActualizar" style="width: 660px; height: 390px;">
+                        <br/><br/><p:outputLabel value="Usuario:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputText disabled="true" style="width: 40%;height: 25px; margin-left: 5%"
+                                     value="#{rolUsuarioControlador.objSelRolUsuario.usuario_id.usuario_nombre} #{rolUsuarioControlador.objSelRolUsuario.usuario_id.usuario_apellido}"/><br/><br/>
+                        <p:outputLabel value="Rol:" style="margin-left: 5%"/><br/><br/>
+                        <h:selectOneMenu style="margin-left: 5%;color: #546380;font-size: 14px;background: transparent;height: 25px"  
+                                         id="selRolActualizar" required="true" requiredMessage="Seleccione un ROL" 
+                                         value="#{rolUsuarioControlador.objSelRolUsuario.rol_id.rol_id}">
+                            <f:selectItems value="#{rolControlador.arrLisRol}"
+                                           var="rol"
+                                           itemValue="#{rol.rol_id}"
+                                           itemLabel="#{rol.rol_descripcion}"/>
+                        </h:selectOneMenu><br/><br/><br/>
+                        <p:commandButton style="width: 43%;margin-left: 5%" value="Actualizar"
+                                         action="#{rolUsuarioControlador.actualizarRolUsuario()}"
+                                         update=":frmRolUsuario :frmActualizarRolUsuario pnlRolUsuarioActualizar :frmCabecera :frmMenu" onclick="PF('wgActualizarRolUsuario').hide()">
+                            <f:param name="idRolRespaldo" value="#{param.get('idRolRespaldo')}"/>
+                            <f:param name="prmIdUsuarioActualizar" id="prmIdUsuarioActualizar" value="#{rolUsuarioControlador.objSelRolUsuario.usuario_id.usuario_id}"/>
+                        </p:commandButton> 
+                    </p:panel>
+                </h:form> 
+            </p:dialog>
+        </ui:define>
+
+    </ui:composition>
+</html>
+
