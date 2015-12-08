@@ -53,8 +53,4 @@ public class TipoEntidad {
         this.tipo_id = tipo_id;
     }
   //</editor-fold>  
-
-  
-
-  
 }

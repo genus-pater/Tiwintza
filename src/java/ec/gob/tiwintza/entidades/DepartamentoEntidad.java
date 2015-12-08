@@ -58,6 +58,10 @@ public class DepartamentoEntidad {
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Constructores">
 
+    public DepartamentoEntidad(long departamento_id) {
+        this.departamento_id = departamento_id;
+    }
+
     public DepartamentoEntidad() {
     }
 

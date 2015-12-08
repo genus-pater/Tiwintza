@@ -10,29 +10,29 @@
         </ui:define>
 
         <ui:define name="contenido">
-            <p:fieldset legend="Crear" toggleable="true" toggleSpeed="500" collapsed="true">
+            <p:fieldset id="fldRolUsuario" legend="Crear" toggleable="true" toggleSpeed="500" collapsed="true">
                 <h:outputText value="Registro de Roles de Usuario" style="margin-left: 5%;"/>
                 <p:separator />
                 <h:form id="frmIngresoRolUsuario">
                     <br/><h:outputText value="Usuario:" style="margin-left: 5%"/><br/><br/>
-                    <h:selectOneMenu style="margin-left: 5%;color: #546380;font-size: 14px;background: transparent;height: 25px"  
+                    <p:selectOneMenu style="margin-left: 5%"  
                                      id="selUsuario" required="true" requiredMessage="Seleccione un USUARIO" 
                                      value="#{rolUsuarioControlador.objRolUsuario.usuario_id.usuario_id}">
                         <f:selectItems value="#{usuarioControlador.arrLisUsuario}"
                                        var="usuario"
                                        itemValue="#{usuario.usuario_id}"
                                        itemLabel="#{usuario.usuario_nombre} #{usuario.usuario_apellido}"/>
-                    </h:selectOneMenu><br/><br/>
+                    </p:selectOneMenu><br/><br/>
                     <h:outputText value="Rol:" style="margin-left: 5%"/><br/><br/>
-                    <h:selectOneMenu style="margin-left: 5%;color: #546380;font-size: 14px;background: transparent;height: 25px"  
+                    <p:selectOneMenu style="margin-left: 5%"  
                                      id="selRol" required="true" requiredMessage="Seleccione un ROL" value="#{rolUsuarioControlador.objRolUsuario.rol_id.rol_id}">
                         <f:selectItems value="#{rolControlador.arrLisRol}"
                                        var="rol"
                                        itemValue="#{rol.rol_id}"
                                        itemLabel="#{rol.rol_descripcion}"/>
-                    </h:selectOneMenu><br/><br/>
+                    </p:selectOneMenu><br/><br/>
                     <p:commandButton id="btnIngresoRolUsuario" style="width: 32%;margin-left: 5%" value="Registrar" 
-                                     update=":frmIngresoRolUsuario :frmRolUsuario :frmCabecera :frmMenu"
+                                     update=" :frmRolUsuario :frmCabecera :frmMenu"
                                      oncomplete="handleSubmitMenu(args,'frmIngresoRolUsuario');"
                                      action="#{rolUsuarioControlador.insertarRolUsuario()}"/>
                 </h:form>
@@ -98,7 +98,7 @@
                 </h:form> 
             </p:dialog>
 
-            <p:dialog id="dlgActualizarRolUsuario" widgetVar="wgActualizarRolUsuario" header="Actualizar Usuarios del Sistema" 
+            <p:dialog id="dlgActualizarRolUsuario" widgetVar="wgActualizarRolUsuario" header="Actualizar asignacion de un Rol" 
                       modal="true"  resizable="false"
                       showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
                       width="700" height="400">  
@@ -108,14 +108,14 @@
                         <p:inputText disabled="true" style="width: 40%;height: 25px; margin-left: 5%"
                                      value="#{rolUsuarioControlador.objSelRolUsuario.usuario_id.usuario_nombre} #{rolUsuarioControlador.objSelRolUsuario.usuario_id.usuario_apellido}"/><br/><br/>
                         <p:outputLabel value="Rol:" style="margin-left: 5%"/><br/><br/>
-                        <h:selectOneMenu style="margin-left: 5%;color: #546380;font-size: 14px;background: transparent;height: 25px"  
+                        <p:selectOneMenu style="margin-left: 5%"  
                                          id="selRolActualizar" required="true" requiredMessage="Seleccione un ROL" 
                                          value="#{rolUsuarioControlador.objSelRolUsuario.rol_id.rol_id}">
                             <f:selectItems value="#{rolControlador.arrLisRol}"
                                            var="rol"
                                            itemValue="#{rol.rol_id}"
                                            itemLabel="#{rol.rol_descripcion}"/>
-                        </h:selectOneMenu><br/><br/><br/>
+                        </p:selectOneMenu><br/><br/><br/>
                         <p:commandButton style="width: 43%;margin-left: 5%" value="Actualizar"
                                          action="#{rolUsuarioControlador.actualizarRolUsuario()}"
                                          update=":frmRolUsuario :frmActualizarRolUsuario pnlRolUsuarioActualizar :frmCabecera :frmMenu" onclick="PF('wgActualizarRolUsuario').hide()">
