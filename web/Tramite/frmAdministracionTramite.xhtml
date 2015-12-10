@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/templates/templateFormularios.xhtml">
+        <ui:define name="top">
+        </ui:define>
+
+        <ui:define name="contenido">
+            <h:form enctype="multipart/form-data">
+                <p:panel style="border-color: #7d7d7d">
+                    <object align="left" style="margin-top: 7px;margin-left: 5%">
+                        <p:outputLabel value="Registro de trámite:" />
+                    </object><br/>
+                    <br/><p:separator style="border:1px dashed #b7b7b7;border-top: none;margin-top: 1px"/><br/><br/>
+                    <p:outputLabel value="Nombre del solicitante:" style="margin-left: 5%"/>
+                    <p:outputLabel value="Descripción del trámite:" style="margin-left: 35.5%"/><br/><br/>
+                    <object align="left" style=" margin-left: 5%;">
+                        <p:autoComplete style="width: 30%;height: 25px;"/>
+                    </object>
+                    <p:inputTextarea style="width: 30%; margin-left: 30%;" rows="8"/><br/>
+                    <object style="margin-left: 5%;margin-top: -115px" align="left">
+                        <p:outputLabel value="Apellido del solicitante:" /><br/>
+                    </object>
+                    <object align="left" style=" margin-left: 5%;margin-top: -95px"><br/>
+                        <p:autoComplete style="width: 30%;height: 25px;"/>
+                    </object><br/>
+                    <object style="margin-left: 5%;margin-top: -75px" align="left">
+                        <br/><br/><p:outputLabel value="Tipo de tramite:" />
+                    </object>
+                    <p:selectOneMenu style="width: 28%;margin-left: 5%;">
+                        <f:selectItems/>
+                    </p:selectOneMenu>
+                    <object align="left" style="margin-left: 70%;margin-bottom: -60px">
+                        <p:outputLabel value="Subir solicitud:" />
+                    </object>
+                    <h:commandLink style=" margin-left: 80%;margin-top: -100px">
+                        <p:graphicImage value="/resources/imagenes/pdf.png" width="60"/>
+                    </h:commandLink>
+                    <p:commandButton value="Registrar" style="width: 32%;margin-left: 5%;margin-top: -300px"/>
+                </p:panel>
+            </h:form>
+        </ui:define>
+
+        <ui:define name="dialogos">
+        </ui:define>
+
+    </ui:composition>
+</html>

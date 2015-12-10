@@ -3,10 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/eborja/NetBeansProjects/Tiwintza/web/Trabajo/frmAdministracionTrabajo.xhtml</file>
-            <file>file:/home/eborja/NetBeansProjects/Tiwintza/src/java/ec/gob/tiwintza/controladores/TrabajoControlador.java</file>
-            <file>file:/home/eborja/NetBeansProjects/Tiwintza/src/java/ec/gob/tiwintza/modelos/TrabajoModelo.java</file>
+            <file>file:/home/eborja/NetBeansProjects/Tiwintza/web/Tramite/frmAdministracionTramite.xhtml</file>
             <file>file:/home/eborja/NetBeansProjects/Tiwintza/web/Rol/frmAdministracionRol.xhtml</file>
+            <file>file:/home/eborja/NetBeansProjects/Tiwintza/src/java/ec/gob/tiwintza/recursos/Enviar_correo.java</file>
+            <file>file:/home/eborja/NetBeansProjects/Tiwintza/nbproject/build-impl.xml</file>
+            <file>file:/home/eborja/NetBeansProjects/Tiwintza/web/META-INF/context.xml</file>
+            <file>file:/home/eborja/NetBeansProjects/Tiwintza/web/WEB-INF/web.xml</file>
         </group>
     </open-files>
 </project-private>
