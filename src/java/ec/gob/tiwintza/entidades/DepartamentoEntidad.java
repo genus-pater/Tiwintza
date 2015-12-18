@@ -13,6 +13,7 @@ public class DepartamentoEntidad {
     private long departamento_id;
     private String departamento_descripcion;
     private String departamento_nombre;
+    
     //<editor-fold defaultstate="collapsed" desc="Sets y Gets">
     /**
      * @return the departamento_id

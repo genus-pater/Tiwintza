@@ -10,8 +10,12 @@
         </ui:define>
 
         <ui:define name="contenido">
-            <h:form enctype="multipart/form-data">
-                <p:panel style="border-color: #7d7d7d">
+            <h:form id="frmTramite" enctype="multipart/form-data">
+                <p:blockUI block="pnlTramite" trigger="cmbTramite" >
+                    <p:outputLabel value="Subiendo..."/>
+                    <p:graphicImage value="/resources/imagenes/ajax-loader.gif"/>
+                </p:blockUI>
+                <p:panel style="border-color: #7d7d7d" id="pnlTramite">
                     <object align="left" style="margin-top: 7px;margin-left: 5%">
                         <p:outputLabel value="Registro de trámite:" />
                     </object><br/>
@@ -19,28 +23,60 @@
                     <p:outputLabel value="Nombre del solicitante:" style="margin-left: 5%"/>
                     <p:outputLabel value="Descripción del trámite:" style="margin-left: 35.5%"/><br/><br/>
                     <object align="left" style=" margin-left: 5%;">
-                        <p:autoComplete style="width: 30%;height: 25px;"/>
+                        <p:autoComplete  id="atcNombre" completeMethod="#{personaControlador.cargarPersona}"
+                                         value="#{tramiteControlador.strNombreApellidoCodigoPersona}" 
+                                         var="persona" itemLabel="#{persona.persona_nombre}" 
+                                         itemValue="#{persona.persona_nombre}-#{persona.persona_apellido}-#{persona.persona_id}"
+                                         style="width: 30%;height: 25px;"
+                                         required="true"
+                                         requiredMessage="Ingrese el nombre del solicitante">
+                            <p:column>
+                                <h:outputText value="#{persona.persona_nombre} #{persona.persona_apellido}"/>
+                            </p:column>
+                            <f:ajax event="itemSelect" listener="#{tramiteControlador.ingresoApellidoAutomatico}"/>
+                        </p:autoComplete>
                     </object>
-                    <p:inputTextarea style="width: 30%; margin-left: 30%;" rows="8"/><br/>
-                    <object style="margin-left: 5%;margin-top: -115px" align="left">
+                    <p:inputTextarea value="#{tramiteControlador.objComentario.comentario_tramite_descripcion}"
+                                     style="width: 30%; margin-left: 30%;" autoResize="false" rows="7" maxlength="1000"
+                                     required="true"
+                                     requiredMessage="Ingrese una descripción y/o un comentario del trámite"/><br/>
+                    <br/><object style="margin-left: 5%;margin-top: -115px" align="left">
                         <p:outputLabel value="Apellido del solicitante:" /><br/>
                     </object>
                     <object align="left" style=" margin-left: 5%;margin-top: -95px"><br/>
-                        <p:autoComplete style="width: 30%;height: 25px;"/>
+                        <p:inputText value="#{tramiteControlador.objTramite.persona_fk.persona_apellido}"
+                                     id="inpApellido" style="width: 197px;"
+                                     required="true"
+                                     requiredMessage="Ingrese el apellido del solicitante"/>
                     </object><br/>
                     <object style="margin-left: 5%;margin-top: -75px" align="left">
                         <br/><br/><p:outputLabel value="Tipo de tramite:" />
                     </object>
-                    <p:selectOneMenu style="width: 28%;margin-left: 5%;">
-                        <f:selectItems/>
+                    <p:selectOneMenu value="#{tramiteControlador.objTramite.tipo_fk.tipo_id}" style="width: 180px; margin-left: 5%;"
+                                     filter="true" filterMatchMode="startsWith">
+                        <f:selectItems value="#{tipoControlador.arrLisTipo}"
+                                       var="tipo"
+                                       itemValue="#{tipo.tipo_id}"
+                                       itemLabel="#{tipo.tipo_nombre}"/>
                     </p:selectOneMenu>
-                    <object align="left" style="margin-left: 70%;margin-bottom: -60px">
-                        <p:outputLabel value="Subir solicitud:" />
+                    <p:fileUpload value="#{tramiteControlador.uplTramite}" id="fluTramite"
+                                  allowTypes="/(\.|\/)(doc|docx|xls|xlsx|pdf|odt)$/"
+                                  cancelLabel="Cancelar" label="Buscar" uploadLabel="Subir"
+                                  style="margin-left: 54.3%;margin-top: -47px"
+                                  mode="advanced" dragDropSupport="false"
+                                  sizeLimit="10000000" fileLimit="5"
+                                  required="true" requiredMessage="Seleccione el documento del tramite a realizar."
+                                  invalidSizeMessage="El archivo es muy grande para ser subido."
+                                  fileLimitMessage="Solo se puede subir 1 archivo"
+                                  invalidFileMessage="El formato el archivo no es aceptado."
+                                  fileUploadListener="#{tramiteControlador.fileUploadListener}"/>
+                    <br/><br/><p:commandButton action="#{tramiteControlador.ingresarTramite()}" id="cmbTramite"
+                                               value="Registrar" style="width: 32%;margin-left: 5%;margin-top: -300px"
+                                               oncomplete="handleSubmitMenu(args,'frmTramite');"
+                                               update=":frmTramite"/>
+                    <object align="left" style="margin-left: 55.2%;margin-top: -60px">
+                        <p:outputLabel id="outNombreArchivo" style="color: #67c232;"/>
                     </object>
-                    <h:commandLink style=" margin-left: 80%;margin-top: -100px">
-                        <p:graphicImage value="/resources/imagenes/pdf.png" width="60"/>
-                    </h:commandLink>
-                    <p:commandButton value="Registrar" style="width: 32%;margin-left: 5%;margin-top: -300px"/>
                 </p:panel>
             </h:form>
         </ui:define>

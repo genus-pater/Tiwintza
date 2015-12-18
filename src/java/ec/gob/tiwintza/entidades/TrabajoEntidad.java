@@ -78,6 +78,10 @@ public class TrabajoEntidad {
         this.trabajo_estado = trabajo_estado;
     }
 
+    public TrabajoEntidad(DepartamentoEntidad departamento_fk) {
+        this.departamento_fk = departamento_fk;
+    }
+
     public TrabajoEntidad() {
         rol_usuario_fk=new RolUsuarioEntidad();
         departamento_fk=new DepartamentoEntidad();

@@ -6,6 +6,7 @@
 package ec.gob.tiwintza.sesiones;
 
 import ec.gob.tiwintza.entidades.RolUsuarioEntidad;
+import ec.gob.tiwintza.entidades.TrabajoEntidad;
 import ec.gob.tiwintza.entidades.UsuarioEntidad;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -20,7 +21,23 @@ public class SesionUsuarioDataManager {
 
     private UsuarioEntidad sesionUsuarioActual;
     private RolUsuarioEntidad sesionRolUsuarioActual;
+    private TrabajoEntidad sesionTrabajoUsuarioActual;
+    
     //<editor-fold defaultstate="collapsed" desc="Sets y Gets">
+
+    /**
+     * @return the sesionTrabajoUsuarioActual
+     */
+    public TrabajoEntidad getSesionTrabajoUsuarioActual() {
+        return sesionTrabajoUsuarioActual;
+    }
+
+    /**
+     * @param sesionDepartamentoUsuarioActual the sesionTrabajoUsuarioActual to set
+     */
+    public void setSesionTrabajoUsuarioActual(TrabajoEntidad sesionDepartamentoUsuarioActual) {
+        this.sesionTrabajoUsuarioActual = sesionDepartamentoUsuarioActual;
+    }
 
     /**
      * @return the sesionUsuarioActual
@@ -54,11 +71,14 @@ public class SesionUsuarioDataManager {
 
     public SesionUsuarioDataManager() {
         sesionUsuarioActual=new UsuarioEntidad();
+        sesionTrabajoUsuarioActual=new TrabajoEntidad();
+        sesionRolUsuarioActual=new RolUsuarioEntidad();
     }
 
     void Destroy() {
         this.sesionRolUsuarioActual = null;
         this.sesionUsuarioActual = null;
+        this.sesionTrabajoUsuarioActual=null;
     }
     //</editor-fold>
 }

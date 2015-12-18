@@ -71,6 +71,34 @@ public class TrabajoModelo {
         }
         return arrLstTrabajo;
     }
+    
+    public static ArrayList<TrabajoEntidad> obtenerTrabajo(String strSql) throws Exception {
+        ArrayList<TrabajoEntidad> arrLstTrabajo = new ArrayList<>();
+        try {
+            ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strSql);
+            arrLstTrabajo = llenarTrabajoSesion(conResultado);
+            conResultado = null;
+        } catch (SQLException exConec) {
+            throw new Exception(exConec.getMessage());
+        }
+        return arrLstTrabajo;
+    }
+    
+    public static ArrayList<TrabajoEntidad> llenarTrabajoSesion(ConjuntoResultado conResultado) throws Exception {
+        ArrayList<TrabajoEntidad> arrLstTrabajo = new ArrayList<>();
+        TrabajoEntidad objTrabajo;
+        try {
+            while (conResultado.next()) {
+                objTrabajo = new TrabajoEntidad(new DepartamentoEntidad(Long.parseLong(conResultado.getBigInteger(4).toString()), 
+                        conResultado.getString(5), conResultado.getString(6)));
+                arrLstTrabajo.add(objTrabajo);
+            }
+        } catch (Exception e) {
+            arrLstTrabajo.clear();
+            throw e;
+        }
+        return arrLstTrabajo;
+    }
 
     public static ArrayList<TrabajoEntidad> llenarTrabajo(ConjuntoResultado conResultado) throws Exception {
         ArrayList<TrabajoEntidad> arrLstTrabajo = new ArrayList<>();

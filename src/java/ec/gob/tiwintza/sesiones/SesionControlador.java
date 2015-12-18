@@ -6,9 +6,12 @@
 package ec.gob.tiwintza.sesiones;
 
 import ec.edu.espoch.sga.recursos.Util;
+import ec.gob.tiwintza.entidades.DepartamentoEntidad;
 import ec.gob.tiwintza.entidades.RolUsuarioEntidad;
+import ec.gob.tiwintza.entidades.TrabajoEntidad;
 import ec.gob.tiwintza.entidades.UsuarioEntidad;
 import ec.gob.tiwintza.modelos.RolUsuarioModelo;
+import ec.gob.tiwintza.modelos.TrabajoModelo;
 import ec.gob.tiwintza.modelos.UsuarioModelo;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -123,7 +126,7 @@ public class SesionControlador {
             dm.getSesionRolUsuarioActual().getRol_id().setRol_id(intIdRol);
             FacesContext.getCurrentInstance().getExternalContext().redirect("/Tiwintza/faces/templates/templateFormularios.xhtml");
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/jpaSGCest");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/Tiwintza/");
         }
     }
 
@@ -132,12 +135,13 @@ public class SesionControlador {
         this.Destroy();
         return "/index?faces-redirect=true";
     }
-    
-    public String comprobarClave(String strClave){
-        if(strClave.length()<128){
-            return "0"+strClave;
-        }else
+
+    public String comprobarClave(String strClave) {
+        if (strClave.length() < 128) {
+            return "0" + strClave;
+        } else {
             return strClave;
+        }
     }
 
     public String encryptPassword(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
@@ -149,8 +153,9 @@ public class SesionControlador {
 
     public String login() throws Exception {
         try {
+            ArrayList<TrabajoEntidad> arrLisTrabajoAux = new ArrayList<>();
             String strEncryptPass = encryptPassword(objUsuario.getUsuario_password());
-            strEncryptPass=comprobarClave(strEncryptPass);
+            strEncryptPass = comprobarClave(strEncryptPass);
             Map<String, Object> cookies = FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap();
             Cookie cooUserSesion = (Cookie) cookies.get("user");
             Cookie cooPassSesion = (Cookie) cookies.get("pass");
@@ -164,6 +169,13 @@ public class SesionControlador {
             UsuarioEntidad objUsuarioAux = arrListAux.get(0);
             strQuery = "call bd_st.pr_select_rol_usuario_sesion(\"" + objUsuarioAux.getUsuario_id() + "\")";
             setArrLisRolUsuarioAux(RolUsuarioModelo.obtenerRolUsuario(strQuery));
+            strQuery = "call bd_st.pr_select_trabajo_sesion(" + objUsuarioAux.getUsuario_id() + "," + arrLisRolUsuarioAux.get(0).getRol_id().getRol_id() + ")";
+            arrLisTrabajoAux = TrabajoModelo.obtenerTrabajo(strQuery);
+            if (!arrLisTrabajoAux.isEmpty()) {
+                this.dm.setSesionTrabajoUsuarioActual(arrLisTrabajoAux.get(0));
+            } else {
+                this.dm.setSesionTrabajoUsuarioActual(new TrabajoEntidad(new DepartamentoEntidad("", "Sin asignar")));
+            }
             this.dm.setSesionUsuarioActual(objUsuarioAux);
             this.dm.setSesionRolUsuarioActual(getArrLisRolUsuarioAux().get(0));
             return "/templates/templateFormularios?faces-redirect=true";
@@ -173,8 +185,6 @@ public class SesionControlador {
             return null;
         }
     }
-    
-    
 
     public String nombreApellido() {
         String strAux = dm.getSesionUsuarioActual().getUsuario_nombre() + " " + dm.getSesionUsuarioActual().getUsuario_apellido();
@@ -186,6 +196,7 @@ public class SesionControlador {
 
     public void keepMeLogued() {
         try {
+            ArrayList<TrabajoEntidad> arrLisTrabajoAux = new ArrayList<>();
             Map<String, Object> cookies = FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap();
             Cookie cooUserSesion = (Cookie) cookies.get("user");
             Cookie cooPassSesion = (Cookie) cookies.get("pass");
@@ -196,6 +207,13 @@ public class SesionControlador {
             UsuarioEntidad objUsuarioAux = arrListAux.get(0);
             strQuery = "call bd_st.pr_select_rol_usuario_sesion(\"" + objUsuarioAux.getUsuario_id() + "\")";
             setArrLisRolUsuarioAux(RolUsuarioModelo.obtenerRolUsuario(strQuery));
+            strQuery = "call bd_st.pr_select_trabajo_sesion(" + objUsuarioAux.getUsuario_id() + "," + arrLisRolUsuarioAux.get(0).getRol_id().getRol_id() + ")";
+            arrLisTrabajoAux = TrabajoModelo.obtenerTrabajo(strQuery);
+            if (!arrLisTrabajoAux.isEmpty()) {
+                this.dm.setSesionTrabajoUsuarioActual(arrLisTrabajoAux.get(0));
+            } else {
+                this.dm.setSesionTrabajoUsuarioActual(new TrabajoEntidad(new DepartamentoEntidad("", "Sin asignar")));
+            }
             this.dm.setSesionUsuarioActual(objUsuarioAux);
             this.dm.setSesionRolUsuarioActual(getArrLisRolUsuarioAux().get(0));
             FacesContext.getCurrentInstance().getExternalContext().redirect("/Tiwintza/faces/templates/templateFormularios.xhtml");

@@ -93,14 +93,19 @@
                     </p:panel>
                 </h:form>
             </p:layoutUnit>
+            
             <p:layoutUnit position="center">
                 <p:graphicImage  rendered="#{request.requestURI == '/Tiwintza/faces/templates/templateFormularios.xhtml'}" value="/resources/imagenes/logo_fondo.png"
                                  style="max-width: 100%;max-height: 100%; position: absolute;top: 50%;left: 50%; transform: translate(-50%,-50%)"/>
                 <ui:insert name="contenido"/>
-                <p:growl id="grlMensajes" autoUpdate="true" life="3000" />
+                <p:growl id="grlMensajes" autoUpdate="true" life="3000" showDetail="true"/>
             </p:layoutUnit>
+            
             <p:layoutUnit position="west" size="300" id="layMenu" >
                 <h:form id="frmMenu">
+                    <p:menu style="width: 99.1%">
+                        <p:menuitem value="Departamento: #{sesionControlador.dm.sesionTrabajoUsuarioActual.departamento_fk.departamento_nombre}"/>
+                    </p:menu>
                     <p:panelMenu model="#{menuControlador.objMenuModel}">
                     </p:panelMenu>
                 </h:form>
