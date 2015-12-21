@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/templates/templateFormularios.xhtml">
+        <ui:define name="top">
+        </ui:define>
+
+        <ui:define name="contenido">
+            <h:form id="frmAsignacionTramite">
+                <p:dataTable id="datTramite" value="#{tramiteAsignacionControlador.arrLisTramite}" var="tramite" 
+                             lazy="true" scrollable="true" liveScroll="true" scrollRows="15" scrollHeight="440"
+                             stickyHeader="false"
+                             selectionMode="single" selection="#{tramiteAsignacionControlador.objSelTramite}" rowKey="#{tramite.tramite_id}"
+                             rendered="#{tramiteAsignacionControlador.arrLisTramite.size() > 0 eq true}">
+                    <p:column headerText="Fecha de subida" width="96.8%">
+                        <h:outputText value="#{tramite.fecha_subida}"/>
+                    </p:column>
+                    <p:column >
+                        <p:commandLink style="width: 30px" ajax="false" onclick="PrimeFaces.monitorDownload();">
+                            <p:graphicImage value="/resources/imagenes/d_verde.ico" style="width: 25px;height: 25px;margin-bottom: -4px"/>
+                            <f:setPropertyActionListener value="#{tramite}" target="#{tramiteAsignacionControlador.objSelTramite}"/>
+                            <p:fileDownload value="#{tramiteAsignacionControlador.strFile}"/>
+                        </p:commandLink>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </ui:define>
+
+        <ui:define name="dialogos">
+        </ui:define>
+
+    </ui:composition>
+</html>
+

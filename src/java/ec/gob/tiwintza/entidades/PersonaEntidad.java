@@ -74,5 +74,8 @@ public class PersonaEntidad {
     public PersonaEntidad() {
     }
 
+    public PersonaEntidad(long persona_id) {
+        this.persona_id = persona_id;
+    }
     //</editor-fold>
 }

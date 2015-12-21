@@ -93,14 +93,28 @@
                     </p:panel>
                 </h:form>
             </p:layoutUnit>
-            
+
             <p:layoutUnit position="center">
+                <p:notificationBar position="top" effect="slide" styleClass="top" widgetVar="bar">
+                    <h:form id="frmCodigo">
+                        <h:outputText id="outCodigo" value="" style="font-size:36px;" />
+                        <object align="right" style="margin-right: 20px">
+                            <p:commandLink style="margin-right: 20px">
+                                <p:graphicImage value="/resources/imagenes/impresora.png" style="width: 50px;height: 50px"/>
+                                <p:printer target="outCodigo"/>
+                            </p:commandLink>
+                            <p:commandLink oncomplete="PF('bar').hide()">
+                                <p:graphicImage value="/resources/imagenes/icon-close.png" style="height: 20px;width: 20px"/>
+                            </p:commandLink>
+                        </object>
+                    </h:form>
+                </p:notificationBar>
                 <p:graphicImage  rendered="#{request.requestURI == '/Tiwintza/faces/templates/templateFormularios.xhtml'}" value="/resources/imagenes/logo_fondo.png"
                                  style="max-width: 100%;max-height: 100%; position: absolute;top: 50%;left: 50%; transform: translate(-50%,-50%)"/>
                 <ui:insert name="contenido"/>
                 <p:growl id="grlMensajes" autoUpdate="true" life="3000" showDetail="true"/>
             </p:layoutUnit>
-            
+
             <p:layoutUnit position="west" size="300" id="layMenu" >
                 <h:form id="frmMenu">
                     <p:menu style="width: 99.1%">

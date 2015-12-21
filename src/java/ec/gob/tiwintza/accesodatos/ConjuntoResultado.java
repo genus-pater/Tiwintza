@@ -123,6 +123,16 @@ public class ConjuntoResultado {
             throw e;
         }
     }
+    
+    public Blob getBlob(int nCol) throws Exception {
+        try {
+            Blob bloN=null;
+            bloN= (Blob)this.Datos.get(indFil)[nCol];
+            return  bloN;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
 
     public byte[] getBytes(String nomCol) throws Exception {
         try {

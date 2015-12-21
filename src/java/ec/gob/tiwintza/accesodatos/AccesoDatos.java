@@ -5,6 +5,7 @@
  */
 package ec.gob.tiwintza.accesodatos;
 
+import ec.gob.tiwintza.entidades.ArchivoEntidad;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -176,7 +177,6 @@ public class AccesoDatos {
                 for (Parametro param : parametros) {
                     pst.setObject(param.getPosicion(), param.getValor());
                 }
-
                 rs = pst.executeQuery();
                 conj.Fill(rs);
                 rs.close();
@@ -210,4 +210,34 @@ public class AccesoDatos {
     }
 
 //</editor-fold>  
+    public static ArchivoEntidad ejecutaQueryArchivo(String strSql, ArrayList<Parametro> arrayListParametros) throws ClassNotFoundException, SQLException {
+        ResultSet rs = null;
+        PreparedStatement pst = null;
+        Connection con = null;
+        Global global = new Global();
+        try {
+            //registro el driver
+            Class.forName(global.getDRIVER());
+            con = DriverManager.getConnection(global.getURL(), global.getUSER(), global.getPASS());
+            pst = con.prepareStatement(strSql);
+            for (Parametro param : arrayListParametros) {
+                pst.setObject(param.getPosicion(), param.getValor());
+            }
+            rs = pst.executeQuery();
+            ArchivoEntidad objAux=null;
+            while(rs.next()){
+                objAux = new ArchivoEntidad(rs.getString("archivo_tipo"),
+                    rs.getString("archivo_nombre"), rs.getBlob("archivo_blob"));
+            }
+            pst.close();
+            pst = null;
+            con.close();
+            con = null;
+            rs.close();
+            rs=null;
+            return objAux;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
 }

@@ -5,6 +5,7 @@
  */
 package ec.gob.tiwintza.entidades;
 
+import java.sql.Blob;
 import java.sql.Timestamp;
 
 /**
@@ -18,9 +19,23 @@ public class TramiteEntidad {
     private TipoEntidad tipo_fk;
     private PersonaEntidad persona_fk;
     private Timestamp fecha_subida;
-    private byte[] tramite_archivo;
+    private String tramite_codigo;
 
     //<editor-fold defaultstate="collapsed" desc="Sets y Gets">
+    
+    /**
+     * @return the tramite_codigo
+     */
+    public String getTramite_codigo() {
+        return tramite_codigo;
+    }
+
+    /**
+     * @param tramite_codigo the tramite_codigo to set
+     */
+    public void setTramite_codigo(String tramite_codigo) {
+        this.tramite_codigo = tramite_codigo;
+    }
     /**
      * @return the tramite_id
      */
@@ -91,45 +106,30 @@ public class TramiteEntidad {
         this.fecha_subida = fecha_subida;
     }
 
-    /**
-     * @return the tramite_archivo
-     */
-    public byte[] getTramite_archivo() {
-        return tramite_archivo;
-    }
-
-    /**
-     * @param tramite_archivo the tramite_archivo to set
-     */
-    public void setTramite_archivo(byte[] tramite_archivo) {
-        this.tramite_archivo = tramite_archivo;
-    }
-
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Constructores">
 
+    
+    public TramiteEntidad(long tramite_id, TrabajoEntidad trabajo_fk, TipoEntidad tipo_fk, PersonaEntidad persona_fk, Timestamp fecha_subida) {
+        this.tramite_id = tramite_id;
+        this.trabajo_fk = trabajo_fk;
+        this.tipo_fk = tipo_fk;
+        this.persona_fk = persona_fk;
+        this.fecha_subida = fecha_subida;
+    }
+    
     public TramiteEntidad() {
         trabajo_fk=new TrabajoEntidad();
         tipo_fk=new TipoEntidad();
         persona_fk=new PersonaEntidad();
     }
 
-    public TramiteEntidad(TrabajoEntidad trabajo_fk, TipoEntidad tipo_fk, PersonaEntidad persona_fk, Timestamp fecha_subida, byte[] tramite_archivo) {
+    public TramiteEntidad(TrabajoEntidad trabajo_fk, TipoEntidad tipo_fk, PersonaEntidad persona_fk, Timestamp fecha_subida) {
         this.trabajo_fk = trabajo_fk;
         this.tipo_fk = tipo_fk;
         this.persona_fk = persona_fk;
         this.fecha_subida = fecha_subida;
-        this.tramite_archivo = tramite_archivo;
     }
-
-    public TramiteEntidad(long tramite_id, TrabajoEntidad trabajo_fk, TipoEntidad tipo_fk, PersonaEntidad persona_fk, Timestamp fecha_subida, byte[] tramite_archivo) {
-        this.tramite_id = tramite_id;
-        this.trabajo_fk = trabajo_fk;
-        this.tipo_fk = tipo_fk;
-        this.persona_fk = persona_fk;
-        this.fecha_subida = fecha_subida;
-        this.tramite_archivo = tramite_archivo;
-    }
-
     //</editor-fold>
+    
 }

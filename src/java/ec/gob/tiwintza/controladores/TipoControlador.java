@@ -56,7 +56,6 @@ public class TipoControlador {
     //<editor-fold defaultstate="collapsed" desc="Constructores">
 
     @PostConstruct
-
     public void reint() {
         cargarTipo();
     }

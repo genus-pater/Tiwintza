@@ -6,16 +6,17 @@
 package ec.gob.tiwintza.controladores;
 
 import ec.edu.espoch.sga.recursos.Util;
+import ec.gob.tiwintza.entidades.ArchivoEntidad;
 import ec.gob.tiwintza.entidades.ComentarioTramiteEntidad;
 import ec.gob.tiwintza.entidades.TramiteEntidad;
+import ec.gob.tiwintza.modelos.ArchivoModelo;
 import ec.gob.tiwintza.modelos.ComentarioTramiteModelo;
 import ec.gob.tiwintza.modelos.PersonaModelo;
 import ec.gob.tiwintza.modelos.TramiteModelo;
-import ec.gob.tiwintza.sesiones.SesionControlador;
 import ec.gob.tiwintza.sesiones.SesionUsuarioDataManager;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
+import java.sql.Blob;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -125,19 +126,30 @@ public class TramiteControlador {
             if (uplTramite != null) {
                 InputStream inpStream = uplTramite.getInputstream();
                 byte[] bytTramite = IOUtils.toByteArray(inpStream);
+                Blob bloAux = null;
+                bloAux = new javax.sql.rowset.serial.SerialBlob(bytTramite);
+                String strNombre = uplTramite.getFileName();
+                String strTipo = uplTramite.getContentType();
                 if (strAux.length > 1) {
                     if (strAux[2] != null) {
                         objTramite.getPersona_fk().setPersona_id(Long.parseLong(strAux[2]));
                         objTramite.getTrabajo_fk().getRol_usuario_fk().getRol_id().setRol_id(sesion.getSesionRolUsuarioActual().getRol_id().getRol_id());
                         objTramite.getTrabajo_fk().getRol_usuario_fk().getUsuario_id().setUsuario_id(sesion.getSesionUsuarioActual().getUsuario_id());
                         objTramite.getTrabajo_fk().getDepartamento_fk().setDepartamento_id(sesion.getSesionTrabajoUsuarioActual().getDepartamento_fk().getDepartamento_id());
-                        objTramite.setTramite_archivo(bytTramite);
                         long lonTramiteId = TramiteModelo.insertarTramite(objTramite);
                         if (lonTramiteId > 0) {
                             objComentario.getTramite_fk().setTramite_id(lonTramiteId);
                             ComentarioTramiteModelo.insertarComentarioTramite(objComentario);
+                            int intPaso = objTramite.getPersona_fk().getPersona_apellido().length();
+                            String strId = cifrarId(lonTramiteId, intPaso);
+                            objTramite.setTramite_id(lonTramiteId);
+                            objTramite.setTramite_codigo(strId);
+                            TramiteModelo.actualizarTramiteCodigo(objTramite);
+                            ArchivoModelo.insertarArchivo(new ArchivoEntidad(objTramite, bloAux, strTipo, strNombre));
                             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("tramiteControlador");
                             Util.addSuccessMessage("Se subio correctamente el trámite");
+                            RequestContext.getCurrentInstance().execute("PF('bar').show();");
+                            RequestContext.getCurrentInstance().execute("{document.getElementById(\"frmCodigo:outCodigo\").innerHTML = 'Código de consulta: " + strId + "'}");
                             this.Destroy();
                         } else {
                             Util.addErrorMessage("No se pudo subir el trámite");
@@ -149,13 +161,20 @@ public class TramiteControlador {
                     objTramite.getTrabajo_fk().getRol_usuario_fk().getRol_id().setRol_id(sesion.getSesionRolUsuarioActual().getRol_id().getRol_id());
                     objTramite.getTrabajo_fk().getRol_usuario_fk().getUsuario_id().setUsuario_id(sesion.getSesionUsuarioActual().getUsuario_id());
                     objTramite.getTrabajo_fk().getDepartamento_fk().setDepartamento_id(sesion.getSesionTrabajoUsuarioActual().getDepartamento_fk().getDepartamento_id());
-                    objTramite.setTramite_archivo(bytTramite);
                     long lonTramiteId = TramiteModelo.insertarTramite(objTramite);
                     if (lonTramiteId > 0) {
                         objComentario.getTramite_fk().setTramite_id(lonTramiteId);
                         ComentarioTramiteModelo.insertarComentarioTramite(objComentario);
+                        int intPaso = objTramite.getPersona_fk().getPersona_apellido().length();
+                        String strId = cifrarId(lonTramiteId, intPaso);
+                        objTramite.setTramite_id(lonTramiteId);
+                        objTramite.setTramite_codigo(strId);
+                        TramiteModelo.actualizarTramiteCodigo(objTramite);
+                        ArchivoModelo.insertarArchivo(new ArchivoEntidad(objTramite, bloAux, strTipo, strNombre));
                         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("tramiteControlador");
                         Util.addSuccessMessage("Se subio correctamente el trámite");
+                        RequestContext.getCurrentInstance().execute("PF('bar').show();");
+                        RequestContext.getCurrentInstance().execute("{document.getElementById(\"frmCodigo:outCodigo\").innerHTML = 'Código de consulta: " + strId + "'}");
                         this.Destroy();
                     } else {
                         Util.addErrorMessage("No se pudo subir el trámite");
@@ -172,9 +191,23 @@ public class TramiteControlador {
     void Destroy() {
         objTramite = null;
         strNombreApellidoCodigoPersona = null;
-        uplTramite = new DefaultUploadedFile();
+        uplTramite = null;
         objComentario = null;
     }
-    //</editor-fold>
 
+    String cifrarId(long lonId, int intPaso) {
+        String strAbc[] = {"Y", "R", "B", "S", "D", "P", "F", "W", "T", "X", "H", "I", "J", "Z", "K", "N",
+            "O", "E", "Q", "L", "U", "C", "V", "A", "G", "M"};
+        String strId[] = String.valueOf(lonId).split("");
+        String strResultado = "";
+        for (int i = 1; i <= (strId.length - 1); i++) {
+            strResultado = strResultado + "" + strAbc[(Integer.parseInt(strId[i]) + (strId.length - 1)) % 26] + "";
+        }
+        int i = 0;
+        while (strResultado.length() < 6) {
+            strResultado = strAbc[((i++) + intPaso) % 26] + strResultado;
+        }
+        return strResultado;
+    }
+    //</editor-fold>
 }
