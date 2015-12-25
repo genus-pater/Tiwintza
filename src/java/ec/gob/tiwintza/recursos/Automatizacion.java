@@ -8,15 +8,11 @@ package ec.gob.tiwintza.recursos;
 import ec.gob.tiwintza.controladores.Tramite_seguimiento_correoControlador;
 import ec.gob.tiwintza.entidades.Tramite_seguimiento_correoEntidad;
 import java.util.ArrayList;
-import java.util.Date;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Timer;
-import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
 
 /**
  *

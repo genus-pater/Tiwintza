@@ -2491,9 +2491,22 @@ hr.ui-widget-header {
   font-weight: normal !important;
   font-family: 'open_sanssemibold';
 }
+
+.redTab{
+    background-color: #e53b39;
+}
+
+.greenTab{
+    background-color: #559d48;
+}
+
+.orangeTab{
+    background-color: #d08028;
+}
+
 .ui-accordion .ui-accordion-header.ui-state-hover,
 .ui-accordion .ui-accordion-header.ui-state-active {
-  background-color: rgba(41, 80, 107, 0.5);
+  background-color: #27506c;
   color: #ffffff;
 }
 .ui-accordion-header .ui-icon-triangle-1-s {

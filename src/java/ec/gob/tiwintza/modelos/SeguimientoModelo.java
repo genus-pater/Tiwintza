@@ -75,12 +75,28 @@ public class SeguimientoModelo {
         return arrLstSeguimiento;
     }
     
+    public static ArrayList<SeguimientoEntidad> obtenerSeguimientoSesion(long lonRol,long lonUsu, long lonDep) throws Exception {
+        ArrayList<SeguimientoEntidad> arrLstSeguimiento = new ArrayList<>();
+        try {
+            ArrayList<Parametro> arrayListParametros = new ArrayList<>();
+            String strSql = "call bd_st.pr_select_seguimiento_sesion(?,?,?); ";
+            arrayListParametros.add(new Parametro(1, lonRol));
+            arrayListParametros.add(new Parametro(2, lonUsu));
+            arrayListParametros.add(new Parametro(3, lonDep));
+            ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strSql,arrayListParametros);
+            arrLstSeguimiento = llenarSeguimiento(conResultado);
+            conResultado = null;
+        } catch (SQLException exConec) {
+            throw new Exception(exConec.getMessage());
+        }
+        return arrLstSeguimiento;
+    }
+    
     public static ArrayList<SeguimientoEntidad> llenarSeguimiento(ConjuntoResultado conResultado) throws Exception {
         ArrayList<SeguimientoEntidad> arrLstSeguimiento = new ArrayList<>();
         SeguimientoEntidad objSeguimiento;
         try {
             while (conResultado.next()) {
-                if (!conResultado.getBoolean(10)) {
                     objSeguimiento = new SeguimientoEntidad(Long.parseLong(conResultado.getBigInteger(0).toString()),
                             new TramiteEntidad(Long.parseLong(conResultado.getBigInteger(1).toString())),
                             new TrabajoEntidad(new RolUsuarioEntidad(
@@ -89,7 +105,6 @@ public class SeguimientoModelo {
                                     new DepartamentoEntidad(Long.parseLong(conResultado.getBigInteger(4).toString()))),
                             conResultado.getTimeStamp(5), conResultado.getTimeStamp(6));
                     arrLstSeguimiento.add(objSeguimiento);
-                }
             }
         } catch (Exception e) {
             arrLstSeguimiento.clear();

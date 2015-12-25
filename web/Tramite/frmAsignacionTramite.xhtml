@@ -10,9 +10,9 @@
         </ui:define>
 
         <ui:define name="contenido">
-            <h:form id="frmAsignacionTramite">
+            <h:form id="frmAsignacionTramite" style="margin-top: -3.2px">
                 <p:dataTable id="datTramite" value="#{tramiteAsignacionControlador.arrLisTramite}" var="tramite" 
-                             lazy="true" scrollable="true" liveScroll="true" scrollRows="15" scrollHeight="440"
+                             lazy="true" scrollable="true" liveScroll="true" scrollRows="15" scrollHeight="449"
                              stickyHeader="false" rowStyleClass="#{tramite.tramite_estado==false?'red':'red'}"
                              selectionMode="single" selection="#{tramiteAsignacionControlador.objSelTramite}" rowKey="#{tramite.tramite_id}"
                              rendered="#{tramiteAsignacionControlador.arrLisTramite.size() > 0 eq true}">
@@ -73,7 +73,7 @@
                         <p:tooltip for="selTrabajo" trackMouse="true" value="Escoja el trabajador al que se le enviará el tramite para su seguimiento."/>
                         <p:outputLabel value="Plazo:" style="margin-left: 5%"/><br/><br/>
                         <p:calendar id="calAsignacion" widgetVar="cal"  value="#{tramiteAsignacionControlador.datPlazo}"
-                                    required="true" requiredMessage="Ingrese una fecha plazo." mask="99/99/9999"
+                                    required="true" requiredMessage="Ingrese una fecha plazo." mask="true"
                                     mindate="PF('cal').today()+1" maxdate="PF('cal').today()+30" 
                                     style="margin-left: 5%"/><br/><br/>
                         <br/><br/><br/><br/><p:commandButton style="width: 43%;margin-left: 5%" value="Asignar"
