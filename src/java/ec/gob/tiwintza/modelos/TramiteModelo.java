@@ -16,7 +16,6 @@ import ec.gob.tiwintza.entidades.TipoEntidad;
 import ec.gob.tiwintza.entidades.TrabajoEntidad;
 import ec.gob.tiwintza.entidades.TramiteEntidad;
 import ec.gob.tiwintza.entidades.UsuarioEntidad;
-import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -25,6 +24,20 @@ import java.util.ArrayList;
  * @author eborja
  */
 public class TramiteModelo {
+
+    public static boolean eliminarTramite(long lonIdTramiteEliminar) throws Exception {
+        String strQuery = "select bd_st.fn_delete_tramite(?)";
+        boolean booResultado = false;
+        ArrayList<Parametro> lisParametros = new ArrayList<>();
+        lisParametros.add(new Parametro(1, lonIdTramiteEliminar));
+        ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strQuery, lisParametros);
+        while (conResultado.next()) {
+            if (conResultado.getBoolean(0)) {
+                booResultado = true;
+            }
+        }
+        return booResultado;
+    }
 
     public static long insertarTramite(TramiteEntidad objTramiteIngresar) throws Exception {
         long lonRespuesta = 0;
@@ -65,6 +78,19 @@ public class TramiteModelo {
         return booRespuesta;
 
     }
+    
+    public static int actualizarTramiteAsignacio(TramiteEntidad objTramiteActualizar) throws Exception {
+        int intRespuesta = 0;
+        String strQuery = "select bd_st.fn_update_tramite_asignacion(?)";
+        ArrayList<Parametro> listParametros = new ArrayList<>();
+        listParametros.add(new Parametro(1, objTramiteActualizar.getTramite_id()));
+        ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strQuery, listParametros);
+        while (conResultado.next()) {
+            intRespuesta=conResultado.getInt(0);
+        }
+        return intRespuesta;
+
+    }
 
     public static ArrayList<TramiteEntidad> obtenerTramite() throws Exception {
         ArrayList<TramiteEntidad> arrLstTramite = new ArrayList<>();
@@ -84,15 +110,18 @@ public class TramiteModelo {
         TramiteEntidad objTramite;
         try {
             while (conResultado.next()) {
-                objTramite = new TramiteEntidad(Long.parseLong(conResultado.getBigInteger(0).toString()),
-                        new TrabajoEntidad(new RolUsuarioEntidad(
-                                        new UsuarioEntidad(Long.parseLong(conResultado.getBigInteger(3).toString())),
-                                        new RolEntidad(Long.parseLong(conResultado.getBigInteger(2).toString()))),
-                                new DepartamentoEntidad(Long.parseLong(conResultado.getBigInteger(4).toString()))),
-                        new TipoEntidad(Long.parseLong(conResultado.getBigInteger(5).toString())),
-                        new PersonaEntidad(Long.parseLong(conResultado.getBigInteger(6).toString())),
-                        conResultado.getTimeStamp(1));
-                arrLstTramite.add(objTramite);
+                if (!conResultado.getBoolean(10)) {
+                    objTramite = new TramiteEntidad(Long.parseLong(conResultado.getBigInteger(0).toString()),
+                            new TrabajoEntidad(new RolUsuarioEntidad(
+                                            new UsuarioEntidad(Long.parseLong(conResultado.getBigInteger(2).toString())),
+                                            new RolEntidad(Long.parseLong(conResultado.getBigInteger(1).toString()))),
+                                    new DepartamentoEntidad(Long.parseLong(conResultado.getBigInteger(3).toString()))),
+                            new TipoEntidad(Long.parseLong(conResultado.getBigInteger(4).toString())),
+                            new PersonaEntidad(Long.parseLong(conResultado.getBigInteger(5).toString())),
+                            conResultado.getTimeStamp(6), conResultado.getString(7), conResultado.getBoolean(8),
+                            conResultado.getBoolean(9), conResultado.getBoolean(10));
+                    arrLstTramite.add(objTramite);
+                }
             }
         } catch (Exception e) {
             arrLstTramite.clear();

@@ -3,12 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/eborja/NetBeansProjects/Tiwintza/web/Tramite/frmAdministracionTramite.xhtml</file>
-            <file>file:/home/eborja/NetBeansProjects/Tiwintza/src/java/ec/gob/tiwintza/modelos/ArchivoModelo.java</file>
-            <file>file:/home/eborja/NetBeansProjects/Tiwintza/web/templates/templateFormularios.xhtml</file>
+            <file>file:/home/eborja/NetBeansProjects/Tiwintza/src/java/ec/gob/tiwintza/modelos/SeguimientoModelo.java</file>
             <file>file:/home/eborja/NetBeansProjects/Tiwintza/src/java/ec/gob/tiwintza/controladores/TramiteAsignacionControlador.java</file>
-            <file>file:/home/eborja/NetBeansProjects/Tiwintza/src/java/ec/gob/tiwintza/accesodatos/AccesoDatos.java</file>
-            <file>file:/home/eborja/NetBeansProjects/Tiwintza/src/java/ec/gob/tiwintza/controladores/TramiteControlador.java</file>
+            <file>file:/home/eborja/NetBeansProjects/Tiwintza/web/Rol/frmAdministracionRol.xhtml</file>
+            <file>file:/home/eborja/NetBeansProjects/Tiwintza/web/Tramite/frmAsignacionTramite.xhtml</file>
         </group>
     </open-files>
 </project-private>

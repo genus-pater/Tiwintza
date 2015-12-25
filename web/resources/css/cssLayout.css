@@ -47,15 +47,15 @@
 }
 
 #top a:link, #top a:visited {
-  color: white;
-  font-weight : bold;
-  text-decoration: none;
+    color: white;
+    font-weight : bold;
+    text-decoration: none;
 }
 
 #top a:link:hover, #top a:visited:hover  {
-  color: black;
-  font-weight : bold;
-  text-decoration : underline;
+    color: black;
+    font-weight : bold;
+    text-decoration : underline;
 }
 
 .myLayoutStyleClass .ui-layout-unit-header{
@@ -63,5 +63,7 @@
 }
 
 .myLayoutStyleClass .ui-layout-unit-content{
-   background: Blue;
+    background: Blue;
 }
+
+

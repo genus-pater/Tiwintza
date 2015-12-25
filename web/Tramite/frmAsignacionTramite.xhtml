@@ -13,24 +13,93 @@
             <h:form id="frmAsignacionTramite">
                 <p:dataTable id="datTramite" value="#{tramiteAsignacionControlador.arrLisTramite}" var="tramite" 
                              lazy="true" scrollable="true" liveScroll="true" scrollRows="15" scrollHeight="440"
-                             stickyHeader="false"
+                             stickyHeader="false" rowStyleClass="#{tramite.tramite_estado==false?'red':'red'}"
                              selectionMode="single" selection="#{tramiteAsignacionControlador.objSelTramite}" rowKey="#{tramite.tramite_id}"
                              rendered="#{tramiteAsignacionControlador.arrLisTramite.size() > 0 eq true}">
-                    <p:column headerText="Fecha de subida" width="96.8%">
-                        <h:outputText value="#{tramite.fecha_subida}"/>
+                    <p:ajax event="rowSelect"  listener="#{tramiteAsignacionControlador.rowEnable()}" update=":diaAsignacion @parent">
+                        <f:setPropertyActionListener target="#{tramiteAsignacionControlador.objSelTramite}" value="#{tramite}"/>
+                    </p:ajax>
+                    <p:column id="colId" headerText="Código de consulta">
+                        <h:outputText value="#{tramite.tramite_codigo}"  style="color: red;" rendered="#{tramite.tramite_estado==false and tramite.tramite_asignacion==false}"/>
+                        <h:outputText value="#{tramite.tramite_codigo}" style="color: green" rendered="#{tramite.tramite_estado==true}"/>
+                        <h:outputText value="#{tramite.tramite_codigo}" style="color: orange" rendered="#{tramite.tramite_estado==false and tramite.tramite_asignacion==true}"/>
+                        <object align="right">
+                            <p:commandLink style="width: 30px;" oncomplete="PF('diaEliminarTramite').show()"
+                                           update=":dlgEliminar @parent">
+                                <p:graphicImage value="/resources/imagenes/trash.png" style="width: 25px;height: 25px;margin-bottom: -4px;margin-right: 4px"/>
+                                <f:param name="prmIdTramiteEliminar" value="#{tramite.tramite_id}"/>
+                            </p:commandLink>
+                            <p:commandLink style="width: 30px;" ajax="false" onclick="PrimeFaces.monitorDownload();">
+                                <p:graphicImage value="/resources/imagenes/d_verde.ico" style="width: 25px;height: 25px;margin-bottom: -4px"/>
+                                <f:setPropertyActionListener value="#{tramite}" target="#{tramiteAsignacionControlador.objSelTramite}"/>
+                                <p:fileDownload value="#{tramiteAsignacionControlador.strFile}"/>
+                            </p:commandLink>
+                        </object>
                     </p:column>
-                    <p:column >
-                        <p:commandLink style="width: 30px" ajax="false" onclick="PrimeFaces.monitorDownload();">
-                            <p:graphicImage value="/resources/imagenes/d_verde.ico" style="width: 25px;height: 25px;margin-bottom: -4px"/>
-                            <f:setPropertyActionListener value="#{tramite}" target="#{tramiteAsignacionControlador.objSelTramite}"/>
-                            <p:fileDownload value="#{tramiteAsignacionControlador.strFile}"/>
-                        </p:commandLink>
+                    <p:column headerText="Estado">
+                        <h:outputText value="Sin asignar" rendered="#{tramite.tramite_estado==false and tramite.tramite_asignacion==false}" style="color: red"/>
+                        <h:outputText value="Terminado" rendered="#{tramite.tramite_estado==true}" style="color: green;"/>
+                        <h:outputText value="Sin concluir"  rendered="#{tramite.tramite_estado==false and tramite.tramite_asignacion==true}" style="color: orange"/>
+                    </p:column>
+                    <p:column headerText="Fecha de subida" style="text-align: right">
+                        <h:outputText value="#{tramite.fecha_subida}" style="color: red" rendered="#{tramite.tramite_estado==false and tramite.tramite_asignacion==false}">
+                            <f:convertDateTime timeZone="EST" pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                        <h:outputText value="#{tramite.fecha_subida}" style="color: green" rendered="#{tramite.tramite_estado==true}">
+                            <f:convertDateTime timeZone="EST" pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                        <h:outputText value="#{tramite.fecha_subida}" style="color: orange" rendered="#{tramite.tramite_estado==false and tramite.tramite_asignacion==true}">
+                            <f:convertDateTime timeZone="EST" pattern="dd/MM/yyyy"/>
+                        </h:outputText>
                     </p:column>
                 </p:dataTable>
             </h:form>
         </ui:define>
 
         <ui:define name="dialogos">
+            <p:dialog id="diaAsignacion" widgetVar="diaAsignacionTramite" header="Asignación de trámite"
+                      modal="true"  resizable="false"
+                      showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
+                      width="700" height="400">
+                <h:form id="frmAsignacion">
+                    <p:panel id="pnlAsignacion" style="width: 660px; height: 390px;">
+                        <br/><br/><h:outputText value="Asignación:" style="margin-left: 5%"/><br/><br/>
+                        <p:selectOneMenu id="selTrabajo" style="margin-left: 5%"
+                                         value="#{tramiteAsignacionControlador.strRolUsuarioDepartamento}">
+                            <f:selectItems var="asignacion" value="#{trabajoControlador.arrLisTrabajo}"
+                                           itemLabel="#{asignacion.rol_usuario_fk.usuario_id.usuario_nombre} #{asignacion.rol_usuario_fk.usuario_id.usuario_apellido} - #{asignacion.rol_usuario_fk.rol_id.rol_descripcion} - #{asignacion.departamento_fk.departamento_nombre}"
+                                           itemValue="#{asignacion.rol_usuario_fk.rol_id.rol_id}-#{asignacion.rol_usuario_fk.usuario_id.usuario_id}-#{asignacion.departamento_fk.departamento_id}"/>
+                        </p:selectOneMenu><br/><br/>
+                        <p:tooltip for="selTrabajo" trackMouse="true" value="Escoja el trabajador al que se le enviará el tramite para su seguimiento."/>
+                        <p:outputLabel value="Plazo:" style="margin-left: 5%"/><br/><br/>
+                        <p:calendar id="calAsignacion" widgetVar="cal"  value="#{tramiteAsignacionControlador.datPlazo}"
+                                    required="true" requiredMessage="Ingrese una fecha plazo." mask="99/99/9999"
+                                    mindate="PF('cal').today()+1" maxdate="PF('cal').today()+30" 
+                                    style="margin-left: 5%"/><br/><br/>
+                        <br/><br/><br/><br/><p:commandButton style="width: 43%;margin-left: 5%" value="Asignar"
+                                                             action="#{tramiteAsignacionControlador.asignarTramite()}"
+                                                             update=":frmAsignacionTramite :frmAsignacion" onclick="PF('diaAsignacionTramite').hide()">
+                            <f:param name="tramiteId" value="#{tramiteAsignacionControlador.objSelTramite.tramite_id}"/>
+                            <f:param name="rolId" value="#{tramiteAsignacionControlador.objSelTramite.trabajo_fk.rol_usuario_fk.rol_id.rol_id}"/>
+                            <f:param name="usuarioId" value="#{tramiteAsignacionControlador.objSelTramite.trabajo_fk.rol_usuario_fk.usuario_id.usuario_id}"/>
+                            <f:param name="departamentoId" value="#{tramiteAsignacionControlador.objSelTramite.trabajo_fk.departamento_fk.departamento_id}"/>
+                        </p:commandButton>
+                    </p:panel>
+                </h:form>
+            </p:dialog>
+            <p:dialog id="dlgEliminar" widgetVar="diaEliminarTramite" header="Eliminar trámite"
+                      modal="true"  resizable="false"
+                      showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true">
+                <h:form id="frmEliminarTramite">
+                    <center>
+                        <p:graphicImage value="/resources/imagenes/info.png" style="width: 40px;height: 40px;margin-top: -10px"/><br/>
+                        <p:commandButton  value="Eliminar" action="#{tramiteAsignacionControlador.eliminarTramite()}"
+                                          update=":frmAsignacionTramite :frmEliminarTramite" onclick="PF('diaEliminarTramite').hide()">
+                            <f:param name="prmIdTramiteEliminar" value="#{param.get('prmIdTramiteEliminar')}"/>
+                        </p:commandButton>
+                    </center>
+                </h:form>
+            </p:dialog>
         </ui:define>
 
     </ui:composition>

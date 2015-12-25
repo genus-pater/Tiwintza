@@ -5,12 +5,10 @@
  */
 package ec.gob.tiwintza.modelos;
 
-import com.sun.rowset.WebRowSetImpl;
 import ec.gob.tiwintza.accesodatos.AccesoDatos;
 import ec.gob.tiwintza.accesodatos.ConjuntoResultado;
 import ec.gob.tiwintza.accesodatos.Parametro;
 import ec.gob.tiwintza.entidades.ArchivoEntidad;
-import java.io.StringReader;
 import java.sql.SQLException;
 import java.util.ArrayList;
 

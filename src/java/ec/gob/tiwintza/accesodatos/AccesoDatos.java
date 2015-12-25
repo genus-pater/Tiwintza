@@ -6,6 +6,7 @@
 package ec.gob.tiwintza.accesodatos;
 
 import ec.gob.tiwintza.entidades.ArchivoEntidad;
+import ec.gob.tiwintza.entidades.SeguimientoArchivoEntidad;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -224,17 +225,49 @@ public class AccesoDatos {
                 pst.setObject(param.getPosicion(), param.getValor());
             }
             rs = pst.executeQuery();
-            ArchivoEntidad objAux=null;
-            while(rs.next()){
+            ArchivoEntidad objAux = null;
+            while (rs.next()) {
                 objAux = new ArchivoEntidad(rs.getString("archivo_tipo"),
-                    rs.getString("archivo_nombre"), rs.getBlob("archivo_blob"));
+                        rs.getString("archivo_nombre"), rs.getBlob("archivo_blob"));
             }
             pst.close();
             pst = null;
             con.close();
             con = null;
             rs.close();
-            rs=null;
+            rs = null;
+            return objAux;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    public static SeguimientoArchivoEntidad ejecutaQuerySeguimientoArchivo(String strSql, ArrayList<Parametro> arrayListParametros) throws ClassNotFoundException {
+        ResultSet rs = null;
+        PreparedStatement pst = null;
+        Connection con = null;
+        Global global = new Global();
+        try {
+            //registro el driver
+            Class.forName(global.getDRIVER());
+            con = DriverManager.getConnection(global.getURL(), global.getUSER(), global.getPASS());
+            pst = con.prepareStatement(strSql);
+            for (Parametro param : arrayListParametros) {
+                pst.setObject(param.getPosicion(), param.getValor());
+            }
+            rs = pst.executeQuery();
+            SeguimientoArchivoEntidad objAux = null;
+            while (rs.next()) {
+                objAux = new SeguimientoArchivoEntidad(rs.getBlob("seguimiento_archivo_blob"),
+                        rs.getString("seguimiento_archivo_tipo"),
+                        rs.getString("seguimiento_archivo_nombre"));
+            }
+            pst.close();
+            pst = null;
+            con.close();
+            con = null;
+            rs.close();
+            rs = null;
             return objAux;
         } catch (SQLException e) {
             return null;

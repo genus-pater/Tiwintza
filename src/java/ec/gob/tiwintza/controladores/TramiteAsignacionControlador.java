@@ -7,16 +7,27 @@ package ec.gob.tiwintza.controladores;
 
 import ec.edu.espoch.sga.recursos.Util;
 import ec.gob.tiwintza.entidades.ArchivoEntidad;
+import ec.gob.tiwintza.entidades.DepartamentoEntidad;
+import ec.gob.tiwintza.entidades.RolEntidad;
+import ec.gob.tiwintza.entidades.RolUsuarioEntidad;
+import ec.gob.tiwintza.entidades.SeguimientoEntidad;
+import ec.gob.tiwintza.entidades.TrabajoEntidad;
 import ec.gob.tiwintza.entidades.TramiteEntidad;
+import ec.gob.tiwintza.entidades.UsuarioEntidad;
 import ec.gob.tiwintza.modelos.ArchivoModelo;
+import ec.gob.tiwintza.modelos.SeguimientoModelo;
 import ec.gob.tiwintza.modelos.TramiteModelo;
-import java.sql.Blob;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -31,14 +42,44 @@ public class TramiteAsignacionControlador {
     private TramiteEntidad objSelTramite;
     private ArrayList<TramiteEntidad> arrLisTramite;
     private StreamedContent strFile;
+    private String strRolUsuarioDepartamento;
+    private Date datPlazo;
 
     //<editor-fold defaultstate="collapsed" desc="Sets y Gets">
+    /**
+     * @return the datPlazo
+     */
+    public Date getDatPlazo() {
+        return datPlazo;
+    }
+
+    /**
+     * @param datPlazo the datPlazo to set
+     */
+    public void setDatPlazo(Date datPlazo) {
+        this.datPlazo = datPlazo;
+    }
+
+    /**
+     * @return the strRolUsuarioDepartamento
+     */
+    public String getStrRolUsuarioDepartamento() {
+        return strRolUsuarioDepartamento;
+    }
+
+    /**
+     * @param strRolUsuarioDepartamento the strRolUsuarioDepartamento to set
+     */
+    public void setStrRolUsuarioDepartamento(String strRolUsuarioDepartamento) {
+        this.strRolUsuarioDepartamento = strRolUsuarioDepartamento;
+    }
+
     /**
      * @return the strFile
      */
     public StreamedContent getStrFile() {
         try {
-            ArchivoEntidad objArchivo=ArchivoModelo.obtenerArchivoBlob(objSelTramite.getTramite_id());
+            ArchivoEntidad objArchivo = ArchivoModelo.obtenerArchivoBlob(objSelTramite.getTramite_id());
             strFile = new DefaultStreamedContent(objArchivo.getArchivo_blob().getBinaryStream(), objArchivo.getArchivo_tipo(), objArchivo.getArchivo_nombre());
             return strFile;
         } catch (Exception ex) {
@@ -95,6 +136,7 @@ public class TramiteAsignacionControlador {
     public TramiteAsignacionControlador() {
         arrLisTramite = new ArrayList<>();
         objSelTramite = new TramiteEntidad();
+        strRolUsuarioDepartamento = "";
     }
 
     //</editor-fold>
@@ -108,7 +150,53 @@ public class TramiteAsignacionControlador {
         }
     }
 
+    public void eliminarTramite() {
+        try {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
+            long lonTramiteId = Long.parseLong(params.get("prmIdTramiteEliminar"));
+            if (TramiteModelo.eliminarTramite(lonTramiteId)) {
+                Util.addSuccessMessage("Se eliminó correctamente el trámite");
+                cargarTramite();
+            } else {
+                Util.addErrorMessage("No se pudo eliminar correctamente el trámite");
+            }
+        } catch (Exception e) {
+            Util.addErrorMessage(e.getMessage());
+        }
+    }
+
+    public void asignarTramite() {
+        try {
+            long lonTraId=Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tramiteId"));
+            long lonRolId=Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("rolId"));
+            long lonUsuId=Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("usuarioId"));
+            long lonDepId=Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("departamentoId"));          
+            SeguimientoEntidad objAux=new SeguimientoEntidad(new TramiteEntidad(lonTraId),
+            new TrabajoEntidad(new RolUsuarioEntidad(
+                    new UsuarioEntidad(lonUsuId),new RolEntidad(lonRolId)),
+            new DepartamentoEntidad(lonDepId)), null, new Timestamp(datPlazo.getTime()));
+            if(SeguimientoModelo.insertarSeguimiento(objAux)>0){
+                if(TramiteModelo.actualizarTramiteAsignacio(new TramiteEntidad(lonTraId))>0){
+                    Util.addSuccessMessage("Se asignó correctamente el seguimiento del trámite");
+                    cargarTramite();
+                }else{
+                    Util.addErrorMessage("No se pudo asignar el seguimiento del trámite");
+                }
+            }
+        } catch (Exception e) {
+            Util.addErrorMessage(e.getMessage());
+        }
+    }
+    
+    public void rowEnable(){
+        if(objSelTramite.isTramite_asignacion()==false){
+            RequestContext.getCurrentInstance().execute("{PF('diaAsignacionTramite').show()}");
+        }
+    }
+
     void Destroy() {
     }
     //</editor-fold>
+
 }

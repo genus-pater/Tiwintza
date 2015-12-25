@@ -16,7 +16,7 @@
                 <p:graphicImage id="graLogo" value="/resources/imagenes/logo_systrack.png" 
                                 style="margin-left: 7%;width: 165px;height: 58.9px;alignment-adjust: auto" onmouseout="achicar1()" onmouseover="agrandar1()"/>                
                 <object align="right"><p:graphicImage onclick="PF('wgLogin').show()" title="Iniciar Sesión" onmouseout="achicar()" onmouseover="agrandar()" id="graLogin" value="/resources/imagenes/perfil.png" 
-                                                       style="width: 50px;height: 50px;alignment-adjust: auto;cursor: pointer;margin-left: -150%"/>
+                                                      style="width: 50px;height: 50px;alignment-adjust: auto;cursor: pointer;margin-left: -150%"/>
                 </object> 
                 <script>
                     function agrandar() {
@@ -53,10 +53,11 @@
                     <p:panel id="pnlBuscarTramite" style="width: 500px;height: 350px;margin-left: auto;margin-right: auto; margin-top: 5%; position:static;">
                         <center>
                             <br/><h:outputText value="Escriba aquí su código" style="font-size: large"/><br/>
-                            <br/><p:separator style="width: 350px; border-top: 2px dashed gainsboro;border-bottom: none;border-right: none;border-left: none"/>
-                            <br/><p:inputText requiredMessage="Ingrese el código de su TRÁMITE" required="true" 
-                                              placeholder="Código de trámite" 
-                                              style="width: 300px;height: 25px"/><br/>
+                            <br/><p:separator style="width: 350px; border-top:1px dashed grey;border-bottom: none;border-right: none;border-left: none"/>
+                            <br/><p:inputText value="#{tramiteConsultaControlador.objTramite.tramite_codigo}"
+                                              requiredMessage="Ingrese el código de su TRÁMITE" required="true" 
+                                              placeholder="Código de consulta" id="inpTramite"
+                                              style="width: 300px;height: 25px; text-transform: uppercase"/><br/>
                             <br/><p:selectBooleanCheckbox style="margin-left: -120px"/>
                             <h:outputText value="Recordar mi código" style="margin-left: 30px"/>
                             <br/><br/><br/><p:commandButton value="Buscar" style="width: 320px;background-color: #00897B"/>
@@ -87,7 +88,7 @@
                         <h:selectBooleanCheckbox  id="booLogin" style="margin-left: -80px;margin-top: 10px " 
                                                   onchange="setLogin()"/><h:outputText value="Permanecer logueado" style="margin-left: 10px"/>
 
-                        <br/><p:separator style="width: 260px;border-top: 2px dashed gainsboro;border-bottom: none;border-right: none;border-left: none"/>
+                        <br/><p:separator style="width: 260px;border-top: 1px dashed gainsboro;border-bottom: none;border-right: none;border-left: none"/>
                         <p:commandButton id="btnLogin" value="Ingresar" style="width: 150px;background-color: green"
                                          update=":frmLogin"
                                          action="#{sesionControlador.login()}"/>
