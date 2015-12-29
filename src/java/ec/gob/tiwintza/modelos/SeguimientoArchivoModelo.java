@@ -19,8 +19,8 @@ import java.util.ArrayList;
  */
 public class SeguimientoArchivoModelo {
     
-    public static long insertarSeguimientoArchivo(SeguimientoArchivoEntidad objSeguimientoArchivoIngresar) throws Exception {
-        long lonRespuesta = 0;
+    public static boolean insertarSeguimientoArchivo(SeguimientoArchivoEntidad objSeguimientoArchivoIngresar) throws Exception {
+        boolean booRespuesta = false;
         try {
             ArrayList<Parametro> arrayListParametros = new ArrayList<>();
             String strSql = "select bd_st.fn_insert_seguimiento_archivo(?,?,?,?,?,?,?,?)";
@@ -34,15 +34,15 @@ public class SeguimientoArchivoModelo {
             arrayListParametros.add(new Parametro(8, objSeguimientoArchivoIngresar.getSeguimiento_archivo_nombre()));
             ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strSql, arrayListParametros);
             while (conResultado.next()) {
-                lonRespuesta = Long.parseLong(conResultado.getBigInteger(0).toString());
+                booRespuesta = conResultado.getBoolean(0);
             }
             conResultado = null;
         } catch (SQLException e) {
-            System.err.println("error" + e.getMessage());
+            throw e;
         } catch (Exception e) {
-            System.err.println("error" + e.getMessage());
+            throw e;
         }
-        return lonRespuesta;
+        return booRespuesta;
     }
 
     public static SeguimientoArchivoEntidad obtenerSeguimientoArchivoBlob(SeguimientoEntidad objSeguimiento) throws Exception {

@@ -60,7 +60,7 @@
             <p:dialog id="diaAsignacion" widgetVar="diaAsignacionTramite" header="Asignación de trámite"
                       modal="true"  resizable="false"
                       showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
-                      width="700" height="400">
+                      minWidth="700" minHeight="400">
                 <h:form id="frmAsignacion">
                     <p:panel id="pnlAsignacion" style="width: 660px; height: 390px;">
                         <br/><br/><h:outputText value="Asignación:" style="margin-left: 5%"/><br/><br/>
@@ -74,15 +74,14 @@
                         <p:outputLabel value="Plazo:" style="margin-left: 5%"/><br/><br/>
                         <p:calendar id="calAsignacion" widgetVar="cal"  value="#{tramiteAsignacionControlador.datPlazo}"
                                     required="true" requiredMessage="Ingrese una fecha plazo." mask="true"
-                                    mindate="PF('cal').today()+1" maxdate="PF('cal').today()+30" 
+                                    mindate="PF('cal').today()+1" maxdate="PF('cal').today()+30"
                                     style="margin-left: 5%"/><br/><br/>
                         <br/><br/><br/><br/><p:commandButton style="width: 43%;margin-left: 5%" value="Asignar"
                                                              action="#{tramiteAsignacionControlador.asignarTramite()}"
-                                                             update=":frmAsignacionTramite :frmAsignacion" onclick="PF('diaAsignacionTramite').hide()">
-                            <f:param name="tramiteId" value="#{tramiteAsignacionControlador.objSelTramite.tramite_id}"/>
-                            <f:param name="rolId" value="#{tramiteAsignacionControlador.objSelTramite.trabajo_fk.rol_usuario_fk.rol_id.rol_id}"/>
-                            <f:param name="usuarioId" value="#{tramiteAsignacionControlador.objSelTramite.trabajo_fk.rol_usuario_fk.usuario_id.usuario_id}"/>
-                            <f:param name="departamentoId" value="#{tramiteAsignacionControlador.objSelTramite.trabajo_fk.departamento_fk.departamento_id}"/>
+                                                             id="cmdAsignacionTramite"
+                                                             update="calAsignacion"
+                                                             oncomplete="handleSubmitMenu(args,'frmAsignacion');">
+                            <f:param name="idTramite" value="#{tramiteAsignacionControlador.objSelTramite.tramite_id}"/>
                         </p:commandButton>
                     </p:panel>
                 </h:form>

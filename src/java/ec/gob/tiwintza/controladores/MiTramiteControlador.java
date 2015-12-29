@@ -30,6 +30,23 @@ public class MiTramiteControlador {
 
     //<editor-fold defaultstate="collapsed" desc="Sets y Gets">
     /**
+     * @return the objSeguimiento
+     */
+    /**
+     * @return the datCurrentDay
+     */
+    public Date getDatCurrentDay() {
+        return datCurrentDay;
+    }
+
+    /**
+     * @param datCurrentDay the datCurrentDay to set
+     */
+    public void setDatCurrentDay(Date datCurrentDay) {
+        this.datCurrentDay = datCurrentDay;
+    }
+
+    /**
      * @return the arrLisSeguimiento
      */
     public ArrayList<SeguimientoEntidad> getArrLisSeguimiento() {
@@ -54,8 +71,9 @@ public class MiTramiteControlador {
      * Creates a new instance of MiTramiteControlador
      */
     public MiTramiteControlador() {
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("tramiteControlador");
         arrLisSeguimiento = new ArrayList<>();
-        datCurrentDay=new Date();
+        datCurrentDay = new Date();
     }
 
     //</editor-fold>
@@ -71,38 +89,28 @@ public class MiTramiteControlador {
         }
     }
 
+    public void update() {
+        cargarSeguimiento();
+    }
+
     public String plazo(Date datPlazo) throws ParseException {
-        String strClass="";
+        String strClass = "";
         Date datCurrentDate = new Date();
         SimpleDateFormat simAux = new SimpleDateFormat("dd/MM/yyyy");
-        String strAux=simAux.format(datPlazo);
-        datPlazo=simAux.parse(strAux);
-        strAux=simAux.format(datCurrentDate);
-        datCurrentDate=simAux.parse(strAux);
-        if (datPlazo.compareTo(datCurrentDate)>0) {
-            strClass="greenTab";
+        String strAux = simAux.format(datPlazo);
+        datPlazo = simAux.parse(strAux);
+        strAux = simAux.format(datCurrentDate);
+        datCurrentDate = simAux.parse(strAux);
+        if (datPlazo.compareTo(datCurrentDate) > 0) {
+            strClass = "greenTab";
         }
-        if(datPlazo.compareTo(datCurrentDate)<0){
-            strClass="redTab";
+        if (datPlazo.compareTo(datCurrentDate) < 0) {
+            strClass = "redTab";
         }
-        if(datPlazo.compareTo(datCurrentDate)==0){
-            strClass="orangeTab";
+        if (datPlazo.compareTo(datCurrentDate) == 0) {
+            strClass = "orangeTab";
         }
         return strClass;
     }
     //</editor-fold>
-
-    /**
-     * @return the datCurrentDay
-     */
-    public Date getDatCurrentDay() {
-        return datCurrentDay;
-    }
-
-    /**
-     * @param datCurrentDay the datCurrentDay to set
-     */
-    public void setDatCurrentDay(Date datCurrentDay) {
-        this.datCurrentDay = datCurrentDay;
-    }
 }

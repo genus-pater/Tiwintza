@@ -96,6 +96,20 @@
             </p:layoutUnit>
 
             <p:layoutUnit position="center">
+                <p:notificationBar position="top" effect="slide" styleClass="top" widgetVar="bar">
+                    <h:form id="frmCodigo">
+                        <h:outputText id="outCodigo" value="" style="font-size:36px;" />
+                        <object align="right" style="margin-right: 20px">
+                            <p:commandLink style="margin-right: 20px">
+                                <p:graphicImage value="/resources/imagenes/impresora.png" style="width: 50px;height: 50px"/>
+                                <p:printer target="outCodigo"/>
+                            </p:commandLink>
+                            <p:commandLink oncomplete="PF('bar').hide()">
+                                <p:graphicImage value="/resources/imagenes/icon-close.png" style="height: 20px;width: 20px"/>
+                            </p:commandLink>
+                        </object>
+                    </h:form>
+                </p:notificationBar>
                 <h:form id="frmNotifi">
                     <p:idleMonitor timeout="30000">
                         <p:ajax event="idle"  update=":frmNotifi" />   
@@ -120,7 +134,7 @@
                 <p:growl id="grlMensajes" autoUpdate="true" life="3000" showDetail="true"/>
             </p:layoutUnit>
 
-            <p:layoutUnit position="west" size="300" id="layMenu" >
+            <p:layoutUnit position="west" size="300" id="layMenu" collapsible="true" header="Menú" >
                 <h:form id="frmMenu">
                     <p:menu style="width: 99.1%">
                         <p:menuitem value="Departamento: #{sesionControlador.dm.sesionTrabajoUsuarioActual.departamento_fk.departamento_nombre}"/>

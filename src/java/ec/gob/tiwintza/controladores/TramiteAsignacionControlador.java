@@ -134,6 +134,7 @@ public class TramiteAsignacionControlador {
      * Creates a new instance of TramiteControlador
      */
     public TramiteAsignacionControlador() {
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("tramiteControlador");
         arrLisTramite = new ArrayList<>();
         objSelTramite = new TramiteEntidad();
         strRolUsuarioDepartamento = "";
@@ -168,17 +169,17 @@ public class TramiteAsignacionControlador {
 
     public void asignarTramite() {
         try {
-            long lonTraId=Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tramiteId"));
-            long lonRolId=Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("rolId"));
-            long lonUsuId=Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("usuarioId"));
-            long lonDepId=Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("departamentoId"));          
+            long lonTraId=Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("idTramite"));
+            String [] strIds=strRolUsuarioDepartamento.split("-");
             SeguimientoEntidad objAux=new SeguimientoEntidad(new TramiteEntidad(lonTraId),
             new TrabajoEntidad(new RolUsuarioEntidad(
-                    new UsuarioEntidad(lonUsuId),new RolEntidad(lonRolId)),
-            new DepartamentoEntidad(lonDepId)), null, new Timestamp(datPlazo.getTime()));
+                    new UsuarioEntidad(Long.parseLong(strIds[1])),new RolEntidad(Long.parseLong(strIds[0]))),
+            new DepartamentoEntidad(Long.parseLong(strIds[2]))), null, new Timestamp(datPlazo.getTime()));
             if(SeguimientoModelo.insertarSeguimiento(objAux)>0){
                 if(TramiteModelo.actualizarTramiteAsignacio(new TramiteEntidad(lonTraId))>0){
                     Util.addSuccessMessage("Se asignó correctamente el seguimiento del trámite");
+                    RequestContext.getCurrentInstance().execute("{PF('diaAsignacionTramite').hide()}");
+                    RequestContext.getCurrentInstance().update("frmAsignacionTramite");
                     cargarTramite();
                 }else{
                     Util.addErrorMessage("No se pudo asignar el seguimiento del trámite");

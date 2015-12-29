@@ -100,6 +100,8 @@ public class SeguimientoEntidad {
     }
 
     public SeguimientoEntidad() {
+        trabajo_fk=new TrabajoEntidad();
+        tramite_fk=new TramiteEntidad();
     }
 
     public SeguimientoEntidad(long seguimiento_id, TramiteEntidad tramite_fk, TrabajoEntidad trabajo_fk, Timestamp seguimiento_fecha_subida, Timestamp seguimiento_fecha_lapso) {

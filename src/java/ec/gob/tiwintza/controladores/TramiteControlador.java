@@ -102,9 +102,11 @@ public class TramiteControlador {
      * Creates a new instance of TramiteControlador
      */
     public TramiteControlador() {
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("tramiteControlador");
         uplTramite = new DefaultUploadedFile();
         objTramite = new TramiteEntidad();
         objComentario = new ComentarioTramiteEntidad();
+        uplTramite=null;
     }
 
     //</editor-fold>
@@ -147,9 +149,10 @@ public class TramiteControlador {
                             TramiteModelo.actualizarTramiteCodigo(objTramite);
                             ArchivoModelo.insertarArchivo(new ArchivoEntidad(objTramite, bloAux, strTipo, strNombre));
                             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("tramiteControlador");
-                            Util.addSuccessMessage("Se subio correctamente el trámite");
+                            Util.addSuccessMessage("Se subió correctamente el trámite");
                             RequestContext.getCurrentInstance().execute("PF('bar').show();");
                             RequestContext.getCurrentInstance().execute("{document.getElementById(\"frmCodigo:outCodigo\").innerHTML = 'Código de consulta: " + strId + "'}");
+                            RequestContext.getCurrentInstance().update("frmTramite");
                             this.Destroy();
                         } else {
                             Util.addErrorMessage("No se pudo subir el trámite");
@@ -175,6 +178,7 @@ public class TramiteControlador {
                         Util.addSuccessMessage("Se subio correctamente el trámite");
                         RequestContext.getCurrentInstance().execute("PF('bar').show();");
                         RequestContext.getCurrentInstance().execute("{document.getElementById(\"frmCodigo:outCodigo\").innerHTML = 'Código de consulta: " + strId + "'}");
+                        RequestContext.getCurrentInstance().update("frmTramite");
                         this.Destroy();
                     } else {
                         Util.addErrorMessage("No se pudo subir el trámite");

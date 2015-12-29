@@ -78,7 +78,7 @@ public class TramiteModelo {
         return booRespuesta;
 
     }
-    
+
     public static int actualizarTramiteAsignacio(TramiteEntidad objTramiteActualizar) throws Exception {
         int intRespuesta = 0;
         String strQuery = "select bd_st.fn_update_tramite_asignacion(?)";
@@ -86,10 +86,21 @@ public class TramiteModelo {
         listParametros.add(new Parametro(1, objTramiteActualizar.getTramite_id()));
         ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strQuery, listParametros);
         while (conResultado.next()) {
-            intRespuesta=conResultado.getInt(0);
+            intRespuesta = conResultado.getInt(0);
         }
         return intRespuesta;
-
+    }
+    
+    public static int actualizarTramiteTerminar(TramiteEntidad objTramiteActualizar) throws Exception {
+        int intRespuesta = 0;
+        String strQuery = "select bd_st.fn_update_tramite_finalizado(?)";
+        ArrayList<Parametro> listParametros = new ArrayList<>();
+        listParametros.add(new Parametro(1, objTramiteActualizar.getTramite_id()));
+        ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strQuery, listParametros);
+        while (conResultado.next()) {
+            intRespuesta = conResultado.getInt(0);
+        }
+        return intRespuesta;
     }
 
     public static ArrayList<TramiteEntidad> obtenerTramite() throws Exception {
@@ -103,6 +114,23 @@ public class TramiteModelo {
             throw new Exception(exConec.getMessage());
         }
         return arrLstTramite;
+    }
+
+    public static String obtenerTramiteTree(long lonTraId) throws Exception {
+        String strRoot = "";
+        try {
+            String strSql = "call bd_st.pr_select_root(?); ";
+            ArrayList<Parametro> listParametros = new ArrayList<>();
+            listParametros.add(new Parametro(1, lonTraId));
+            ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strSql,listParametros);
+            while (conResultado.next()) {
+                strRoot = conResultado.getString(0) + ": " + conResultado.getString(1) + " " + conResultado.getString(2);
+            }
+            conResultado = null;
+        } catch (SQLException exConec) {
+            throw new Exception(exConec.getMessage());
+        }
+        return strRoot;
     }
 
     public static ArrayList<TramiteEntidad> llenarTramite(ConjuntoResultado conResultado) throws Exception {

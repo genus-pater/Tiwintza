@@ -211,6 +211,11 @@ public class TramiteEntidad {
         this.tramite_estado = tramite_estado;
     }
 
+    public TramiteEntidad(long tramite_id, String tramite_codigo) {
+        this.tramite_id = tramite_id;
+        this.tramite_codigo = tramite_codigo;
+    }
+
     public TramiteEntidad(long tramite_id) {
         this.tramite_id = tramite_id;
     }
