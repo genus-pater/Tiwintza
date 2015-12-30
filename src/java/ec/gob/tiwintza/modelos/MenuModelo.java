@@ -7,10 +7,12 @@ package ec.gob.tiwintza.modelos;
 
 import ec.gob.tiwintza.accesodatos.AccesoDatos;
 import ec.gob.tiwintza.accesodatos.ConjuntoResultado;
+import ec.gob.tiwintza.accesodatos.Parametro;
 import ec.gob.tiwintza.entidades.MenuEntidad;
 import ec.gob.tiwintza.entidades.RolEntidad;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -54,6 +56,21 @@ public class MenuModelo {
         } catch (Exception e) {
             arrLstMenu.clear();
             throw e;
+        }
+        return arrLstMenu;
+    }
+
+    public static List<MenuEntidad> obtenerMenuSesion(long lonId) throws Exception {
+        ArrayList<MenuEntidad> arrLstMenu = new ArrayList<>();
+        try {
+            ArrayList<Parametro> arrLisPar=new ArrayList<>();
+            String strSql = "call bd_st.pr_select_menu_sesion(?); ";
+            arrLisPar.add(new Parametro(1, lonId));
+            ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strSql,arrLisPar);
+            arrLstMenu = llenarMenu(conResultado);
+            conResultado = null;
+        } catch (SQLException exConec) {
+            throw new Exception(exConec.getMessage());
         }
         return arrLstMenu;
     }

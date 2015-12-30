@@ -7,9 +7,11 @@ package ec.gob.tiwintza.sesiones;
 
 import ec.edu.espoch.sga.recursos.Util;
 import ec.gob.tiwintza.entidades.DepartamentoEntidad;
+import ec.gob.tiwintza.entidades.MenuEntidad;
 import ec.gob.tiwintza.entidades.RolUsuarioEntidad;
 import ec.gob.tiwintza.entidades.TrabajoEntidad;
 import ec.gob.tiwintza.entidades.UsuarioEntidad;
+import ec.gob.tiwintza.modelos.MenuModelo;
 import ec.gob.tiwintza.modelos.RolUsuarioModelo;
 import ec.gob.tiwintza.modelos.TrabajoModelo;
 import ec.gob.tiwintza.modelos.UsuarioModelo;
@@ -19,6 +21,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -178,6 +181,7 @@ public class SesionControlador {
             }
             this.dm.setSesionUsuarioActual(objUsuarioAux);
             this.dm.setSesionRolUsuarioActual(getArrLisRolUsuarioAux().get(0));
+            this.dm.setLisMenu(MenuModelo.obtenerMenuSesion(dm.getSesionRolUsuarioActual().getRol_id().getRol_id()));
             return "/templates/templateFormularios?faces-redirect=true";
         } catch (Exception e) {
             Util.addErrorMessage("Usuario o contraseña INCORRECTAS");
@@ -186,12 +190,38 @@ public class SesionControlador {
         }
     }
 
-    public String nombreApellido() {
+    public String nombreApellido() throws IOException {
         String strAux = dm.getSesionUsuarioActual().getUsuario_nombre() + " " + dm.getSesionUsuarioActual().getUsuario_apellido();
         if (strAux.length() >= 22) {
             strAux = strAux.substring(0, 20).concat("...");
         }
         return strAux;
+    }
+
+    public void sesion(String strUri) throws IOException, Exception {
+        try {
+            if (dm.getSesionUsuarioActual().getUsuario_nombre() == null) {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/Tiwintza;");
+            }
+            int intCon = 0;
+            strUri = strUri.substring(15);
+            if (!strUri.equals("/templates/templateFormularios.xhtml")) {
+                for (MenuEntidad objAux : dm.getLisMenu()) {
+                    if (objAux.getMenu_ruta() != null) {
+                        if (objAux.getMenu_ruta().equals(strUri)) {
+                            ++intCon;
+                        }
+                    }
+                }
+            } else {
+                intCon = 1;
+            }
+            if (intCon == 0) {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/Tiwintza;");
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/Tiwintza;");
+        }
     }
 
     public void keepMeLogued() {
@@ -216,6 +246,7 @@ public class SesionControlador {
             }
             this.dm.setSesionUsuarioActual(objUsuarioAux);
             this.dm.setSesionRolUsuarioActual(getArrLisRolUsuarioAux().get(0));
+            this.dm.setLisMenu(MenuModelo.obtenerMenuSesion(dm.getSesionRolUsuarioActual().getRol_id().getRol_id()));
             FacesContext.getCurrentInstance().getExternalContext().redirect("/Tiwintza/faces/templates/templateFormularios.xhtml");
         } catch (Exception e) {
 

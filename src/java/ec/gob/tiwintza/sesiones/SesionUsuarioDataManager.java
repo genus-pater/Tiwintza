@@ -5,11 +5,14 @@
  */
 package ec.gob.tiwintza.sesiones;
 
+import ec.gob.tiwintza.entidades.MenuEntidad;
 import ec.gob.tiwintza.entidades.RolUsuarioEntidad;
 import ec.gob.tiwintza.entidades.TrabajoEntidad;
 import ec.gob.tiwintza.entidades.UsuarioEntidad;
+import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -22,8 +25,22 @@ public class SesionUsuarioDataManager {
     private UsuarioEntidad sesionUsuarioActual;
     private RolUsuarioEntidad sesionRolUsuarioActual;
     private TrabajoEntidad sesionTrabajoUsuarioActual;
-    
+    private List<MenuEntidad> lisMenu;
+
     //<editor-fold defaultstate="collapsed" desc="Sets y Gets">
+    /**
+     * @return the lisMenu
+     */
+    public List<MenuEntidad> getLisMenu() {
+        return lisMenu;
+    }
+
+    /**
+     * @param lisMenu the lisMenu to set
+     */
+    public void setLisMenu(List<MenuEntidad> lisMenu) {
+        this.lisMenu = lisMenu;
+    }
 
     /**
      * @return the sesionTrabajoUsuarioActual
@@ -33,7 +50,8 @@ public class SesionUsuarioDataManager {
     }
 
     /**
-     * @param sesionDepartamentoUsuarioActual the sesionTrabajoUsuarioActual to set
+     * @param sesionDepartamentoUsuarioActual the sesionTrabajoUsuarioActual to
+     * set
      */
     public void setSesionTrabajoUsuarioActual(TrabajoEntidad sesionDepartamentoUsuarioActual) {
         this.sesionTrabajoUsuarioActual = sesionDepartamentoUsuarioActual;
@@ -61,7 +79,8 @@ public class SesionUsuarioDataManager {
     }
 
     /**
-     * @param sesionUsuarioRolUsuarioActual the sesionUsuarioRolUsuarioActual to set
+     * @param sesionUsuarioRolUsuarioActual the sesionUsuarioRolUsuarioActual to
+     * set
      */
     public void setSesionRolUsuarioActual(RolUsuarioEntidad sesionUsuarioRolUsuarioActual) {
         this.sesionRolUsuarioActual = sesionUsuarioRolUsuarioActual;
@@ -70,15 +89,17 @@ public class SesionUsuarioDataManager {
     //<editor-fold defaultstate="collapsed" desc="Constructores">
 
     public SesionUsuarioDataManager() {
-        sesionUsuarioActual=new UsuarioEntidad();
-        sesionTrabajoUsuarioActual=new TrabajoEntidad();
-        sesionRolUsuarioActual=new RolUsuarioEntidad();
+        sesionUsuarioActual = new UsuarioEntidad();
+        sesionTrabajoUsuarioActual = new TrabajoEntidad();
+        sesionRolUsuarioActual = new RolUsuarioEntidad();
     }
 
     void Destroy() {
         this.sesionRolUsuarioActual = null;
         this.sesionUsuarioActual = null;
-        this.sesionTrabajoUsuarioActual=null;
+        this.sesionTrabajoUsuarioActual = null;
+        this.lisMenu=null;
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("sesionUsuarioDataManager");
     }
     //</editor-fold>
 }

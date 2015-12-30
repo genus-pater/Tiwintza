@@ -17,7 +17,7 @@
         <title>SysTrack</title>
     </h:head>
 
-    <h:body onload="#{sesionControlador.sesion(request.requestURI)}" style="background-color: #27506c;width: 100%;height: 100%;border: none;page: auto; margin-left: 0px; margin-right: 0px;margin-bottom: 0px;margin-top: 0px">
+    <h:body style="background-color: #27506c;width: 100%;height: 100%;border: none;page: auto; margin-left: 0px; margin-right: 0px;margin-bottom: 0px;margin-top: 0px">
 
         <p:layout style="width: 90%;height:720px ;min-width: 1050px; margin-left: auto;margin-right: auto; position:static "  >
             <p:layoutUnit position="south" style="border: none;height: 50px;background: transparent" size="50">
@@ -77,7 +77,7 @@
                     <p:panel id="pnlSesion" style="border: none;background: transparent;margin-top: 25px;height: 30px">
                         <object style="margin-left: 50px; margin-bottom: 50px">
                             <h:outputText value="Usuario:" style="color: white; font-size: medium"/>
-                            <p:outputLabel value="#{sesionControlador.nombreApellido()}" id="outSesion" style="color: white;font-size: medium;margin-left: 10px;"/>
+                            <h:outputLabel value="#{sesionControlador.nombreApellido()}" id="outSesion" style="color: white;font-size: medium;margin-left: 10px;"/>
                         </object>
                         <hr style="width: 0px;height: 48px;border: none;margin-left: 300px;margin-top: -40px;background-color: transparent;border: 1px dashed gainsboro"/>
                         <hr style="width: 0px;height: 48px;margin-right: 350px;margin-top: -56px;background-color: transparent;border: 1px dashed gainsboro"/>
@@ -96,52 +96,10 @@
             </p:layoutUnit>
 
             <p:layoutUnit position="center">
-                <p:notificationBar position="top" effect="slide" styleClass="top" widgetVar="bar">
-                    <h:form id="frmCodigo">
-                        <h:outputText id="outCodigo" value="" style="font-size:36px;" />
-                        <object align="right" style="margin-right: 20px">
-                            <p:commandLink style="margin-right: 20px">
-                                <p:graphicImage value="/resources/imagenes/impresora.png" style="width: 50px;height: 50px"/>
-                                <p:printer target="outCodigo"/>
-                            </p:commandLink>
-                            <p:commandLink oncomplete="PF('bar').hide()">
-                                <p:graphicImage value="/resources/imagenes/icon-close.png" style="height: 20px;width: 20px"/>
-                            </p:commandLink>
-                        </object>
-                    </h:form>
-                </p:notificationBar>
-                <h:form id="frmNotifi">
-                    <p:idleMonitor timeout="30000">
-                        <p:ajax event="idle"  update=":frmNotifi" />   
-                        <p:ajax event="active"  update=":frmNotifi" />
-                    </p:idleMonitor>
-                    <p:graphicImage  rendered="#{request.requestURI == '/Tiwintza/faces/templates/templateFormularios.xhtml' and notificacionControlador.arrLisNotificacion.size()==0 or notificacionControlador.arrLisNotificacion==null}" value="/resources/imagenes/logo_fondo.png"
-                                     style="background: no-repeat;max-width: 100%;max-height: 100%; position: absolute;top: 50%;left: 50%; transform: translate(-50%,-50%);"/>
-                    <p:accordionPanel  rendered="#{request.requestURI == '/Tiwintza/faces/templates/templateFormularios.xhtml' and notificacionControlador.arrLisNotificacion.size()!=0}" activeIndex="null" value="#{notificacionControlador.arrLisNotificacion}" var="notificacion" multiple="true">
-                        <p:ajax event="tabChange" listener="#{notificacionControlador.actualizarNotificacion(notificacion.notificacion_id)}" />
-                        <p:ajax event="tabClose" listener="#{notificacionControlador.actualizarNotificacion(notificacion.notificacion_id)}" update=":frmNotifi" />
-                        <p:tab  title=" Trámite asignado con código: #{notificacion.notificacion_id}">
-                            <h:panelGrid columns="2" cellpadding="10" style="border-color: white ">
-                                <h:outputText value="Estimado #{sesionControlador.nombreApellido()} se le ha signado un nuevo tramite con nombre:  #{notificacion.notificacion_desctipcion}">
-                                    <f:param name="prmIdTipoEliminar" id="prmIdTipoEliminar" value="#{notificacion.notificacion_id}"/>   
-                                </h:outputText>
-                            </h:panelGrid>
-                        </p:tab>          
-
-                    </p:accordionPanel>
-                </h:form>
+                <p:graphicImage  rendered="#{request.requestURI == '/Tiwintza/faces/templates/templateFormularios.xhtml' and notificacionControlador.arrLisNotificacion.size()==0 or notificacionControlador.arrLisNotificacion==null}" value="/resources/imagenes/logo_fondo.png"
+                                 style="background: no-repeat;max-width: 100%;max-height: 100%; position: absolute;top: 50%;left: 50%; transform: translate(-50%,-50%);"/>
                 <ui:insert name="contenido"/>
                 <p:growl id="grlMensajes" autoUpdate="true" life="3000" showDetail="true"/>
-            </p:layoutUnit>
-
-            <p:layoutUnit position="west" size="300" id="layMenu" collapsible="true" header="Menú" >
-                <h:form id="frmMenu">
-                    <p:menu style="width: 99.1%">
-                        <p:menuitem value="Departamento: #{sesionControlador.dm.sesionTrabajoUsuarioActual.departamento_fk.departamento_nombre}"/>
-                    </p:menu>
-                    <p:panelMenu model="#{menuControlador.objMenuModel}">
-                    </p:panelMenu>
-                </h:form>
             </p:layoutUnit>
         </p:layout>
         <ui:insert name="dialogos"/>
