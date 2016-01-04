@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/templates/templateFormularios.xhtml">
+        <ui:define name="top">
+        </ui:define>
+
+        <ui:define name="contenido">
+
+            <p:separator style="backface-visibility: hidden"/>
+            <p:panel>
+                <h:form id="frmReporte">
+                    <p:dataTable id="datReporte" value="#{dtFilterView2.arrLisReporte}" var="reporte" paginator="true" rows="100" 
+                                 selectionMode="single" selection="#{dtFilterView2.objEntidad}" rowKey="#{reporte.tramite_id}" 
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+                                 rowsPerPageTemplate="5,10,15" 
+                                 emptyMessage="No se encontraron coincidencias intente de nuevo por favor."  
+                                 filteredValue="#{dtFilterView2.arrayListReporte2}">
+
+                        <f:facet name="header"  >
+                            Emisión de reportes
+                            <h:commandLink>
+                                <p:graphicImage value="/resources/imagenes/pdf.png" width="40px" height="30px" style="float: right"  />
+                                <p:dataExporter type="pdf" target="datReporte" fileName="Reporte" pageOnly="true" preProcessor="#{dtFilterView1.preProcessPDF}" encoding="ISO-8859-1"/>
+                            </h:commandLink>
+                            <p:commandButton id="toggler" type="button" value="Columnas" style="float: left; height: 30px" icon="ui-icon-calculator" />
+                            <p:columnToggler datasource="datReporte" trigger="toggler" />
+                        </f:facet>
+
+                        <p:column headerText="Código trámite" sortBy="#{reporte.tramite_codigo}" filterBy="#{reporte.tramite_codigo}" >
+                            <h:outputText value="#{reporte.tramite_codigo}"/>
+                        </p:column>
+                        <p:column headerText="Descripción del trámite" sortBy="#{reporte.comentario_tramite}" filterBy="#{reporte.comentario_tramite}" >
+                            <h:outputText value="#{reporte.comentario_tramite}"/>
+                        </p:column>
+                        <p:column headerText="Días empleados" sortBy="#{reporte.demora}" filterBy="#{reporte.demora}" >
+                            <h:outputText value="#{reporte.demora} días"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:panel>
+        </ui:define>
+    </ui:composition>
+</html>

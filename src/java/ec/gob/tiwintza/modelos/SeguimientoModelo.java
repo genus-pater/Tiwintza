@@ -80,7 +80,7 @@ public class SeguimientoModelo {
         SeguimientoEntidad objSeguimiento;
         try {
             while (conResultado.next()) {
-                if (!conResultado.getBoolean(10)) {
+               
                     objSeguimiento = new SeguimientoEntidad(Long.parseLong(conResultado.getBigInteger(0).toString()),
                             new TramiteEntidad(Long.parseLong(conResultado.getBigInteger(1).toString())),
                             new TrabajoEntidad(new RolUsuarioEntidad(
@@ -89,7 +89,7 @@ public class SeguimientoModelo {
                                     new DepartamentoEntidad(Long.parseLong(conResultado.getBigInteger(4).toString()))),
                             conResultado.getTimeStamp(5), conResultado.getTimeStamp(6));
                     arrLstSeguimiento.add(objSeguimiento);
-                }
+                
             }
         } catch (Exception e) {
             arrLstSeguimiento.clear();

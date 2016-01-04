@@ -107,7 +107,7 @@ public class TipoControlador {
             Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
             long lonIdTipoEliminar = Long.parseLong(params.get("prmIdTipoEliminar"));
             if (TipoModelo.eliminarTipo(lonIdTipoEliminar) > 1) {
-                Util.addSuccessMessage("Se elimino correctamente el tipo de trámite");
+                Util.addSuccessMessage("Se ELIMINÓ correctamente el tipo de trámite");
             } else {
                 Util.mostrarMensaje("No se pudo eliminar el tipo de trámite");
             }
@@ -123,9 +123,9 @@ public class TipoControlador {
             Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
             long lonIdTipoEliminar = Long.parseLong(params.get("prmIdTipoActualizar"));
             if (TipoModelo.actualizarTipo(new TipoEntidad(lonIdTipoEliminar, objSelTipo.getTipo_nombre(),objSelTipo.getTipo_descripcion())) > 1) {
-                Util.mostrarMensaje("No se actualizó el tipo de trámite");
+               Util.addSuccessMessage("Se ACTUALIZÓ correctamente el Tipo de trámite");
             } else {
-                Util.addSuccessMessage("Se actualizó el tramite correctamente");
+                Util.mostrarMensaje("No se pudo actualizar el Tipo de trámite");
             }
         } catch (Exception e) {
             Util.addErrorMessage(e.getMessage());

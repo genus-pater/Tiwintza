@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/templates/templateFormularios.xhtml">
+        <ui:define name="top">
+        </ui:define>
+
+        <ui:define name="contenido">
+
+            <h:form id="charts">
+                <font size="3"><h:outputText value="Estado de los trámites" style="margin-left: 5%;font-weight: normal;" /></font>
+                <p:separator/>
+                <center>
+                    <h1> 
+                        <p:poll interval="3" update="chart1" />
+                        <p:chart id="chart1" type="pie" model="#{estadoControlador.pieModel2}" style="width:900px;height:450px" />
+                        <p:poll interval="3" update="chart2" />
+                        <p:chart id="chart2" type="pie" model="#{estadoControlador.pieModel1}" style="width:900px;height:450px" />
+                        <p:poll interval="3" update="chart3" />
+                        <p:chart id="chart3" type="pie" model="#{estadoControlador.pieModel3}" style="width:900px;height:450px" />
+                    </h1>
+                </center>
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+</html>
