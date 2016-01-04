@@ -25,8 +25,8 @@
                     <center>
                         <h:outputText value="® Derechos de autor GAD Municipal de Tiwintza &amp; " 
                                       style="color: white;font-size: larger"/>
-                        <h:outputText value="LEWISA.SA" 
-                                      style="color: #2bb673;font-size: larger"/>
+                        <a href="http://www.facebook.com"><h:outputLabel value="LEWISA.SA" 
+                                      style="color: #2bb673;font-size: larger;cursor: pointer"/></a>
                     </center>
                 </p:panel>
             </p:layoutUnit>
@@ -139,7 +139,7 @@
                     <p:menu style="width: 99.1%">
                         <p:menuitem value="Departamento: #{sesionControlador.dm.sesionTrabajoUsuarioActual.departamento_fk.departamento_nombre}"/>
                     </p:menu>
-                    <p:panelMenu model="#{menuControlador.objMenuModel}">
+                    <p:panelMenu model="#{menuControlador.objMenuModel}" rendered="#{sesionControlador.renderMenu()}">
                     </p:panelMenu>
                 </h:form>
             </p:layoutUnit>

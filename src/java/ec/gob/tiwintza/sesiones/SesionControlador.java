@@ -21,7 +21,6 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -124,9 +123,29 @@ public class SesionControlador {
 
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Funciones">
+    public boolean renderMenu() {
+        boolean booRes = false;
+        if (dm.getSesionTrabajoUsuarioActual().getDepartamento_fk().getDepartamento_nombre().equals("Sin asignar")) {
+            if (dm.getSesionRolUsuarioActual().getRol_id().getRol_id() == 1) {
+                booRes = true;
+            }
+        } else {
+            booRes = true;
+        }
+        return booRes;
+    }
+
     public void cambioRol() throws IOException {
         try {
             dm.getSesionRolUsuarioActual().getRol_id().setRol_id(intIdRol);
+            String strQuery = "call bd_st.pr_select_trabajo_sesion(" + dm.getSesionUsuarioActual().getUsuario_id() + "," + dm.getSesionRolUsuarioActual().getRol_id().getRol_id() + ")";
+            ArrayList<TrabajoEntidad> arrLisTrabajoAux = TrabajoModelo.obtenerTrabajo(strQuery);
+            if (!arrLisTrabajoAux.isEmpty()) {
+                this.dm.setSesionTrabajoUsuarioActual(arrLisTrabajoAux.get(0));
+            } else {
+                this.dm.setSesionTrabajoUsuarioActual(new TrabajoEntidad(new DepartamentoEntidad("", "Sin asignar")));
+            }
+            this.dm.setLisMenu(MenuModelo.obtenerMenuSesion(dm.getSesionRolUsuarioActual().getRol_id().getRol_id()));
             FacesContext.getCurrentInstance().getExternalContext().redirect("/Tiwintza/faces/templates/templateFormularios.xhtml");
         } catch (Exception e) {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/Tiwintza/");
@@ -205,7 +224,7 @@ public class SesionControlador {
             }
             int intCon = 0;
             strUri = strUri.substring(15);
-            if (!(strUri.equals("/templates/templateFormularios.xhtml")||strUri.equals("/Perfil/frmAdministracionPerfil.xhtml"))) {
+            if (!(strUri.equals("/templates/templateFormularios.xhtml") || strUri.equals("/Perfil/frmAdministracionPerfil.xhtml"))) {
                 for (MenuEntidad objAux : dm.getLisMenu()) {
                     if (objAux.getMenu_ruta() != null) {
                         if (objAux.getMenu_ruta().equals(strUri)) {
