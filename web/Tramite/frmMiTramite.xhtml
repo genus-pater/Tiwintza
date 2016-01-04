@@ -1,0 +1,173 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/templates/templateFormularios.xhtml">
+        <ui:define name="top">
+        </ui:define>
+
+        <ui:define name="contenido">
+            <h:form id="frmMiAsignacionTramite">
+                <p:panel style="border-color: #7d7d7d;min-height: 470px" id="pnlMiTramite">
+                    <object align="left" style="margin-top: 7px;margin-left: 5%">
+                        <p:outputLabel value="Mis trámites" />
+                    </object><br/>
+                    <br/><p:separator style="border:1px dashed #b7b7b7;border-top: none;margin-top: 1px"/>
+                    <p:graphicImage  rendered="#{miTramiteControlador.arrLisSeguimiento.size()>0 eq false}" value="/resources/imagenes/logo_fondo.png"
+                                     style="background: no-repeat;max-width: 100%;max-height: 100%; position: absolute;top: 50%;left: 50%; transform: translate(-50%,-50%);"/>
+                    <p:accordionPanel   dynamic="true" id="acrAsignacion"  rendered="#{miTramiteControlador.arrLisSeguimiento.size()>0 eq true}" 
+                                        value="#{miTramiteControlador.arrLisSeguimiento}" var="miTramite" activeIndex="null" >
+                        <p:tab  titleStyleClass="#{miTramiteControlador.plazo(miTramite.seguimiento_fecha_lapso)}">
+                            <f:facet name="title">
+                                <h:outputText value="Trámite: #{miTramite.tramite_fk.tramite_codigo}"/>
+                                <h:outputText value="Plazo: #{miTramite.seguimiento_fecha_lapso.toGMTString().subSequence(0, 11)}"
+                                              style="margin-left: 100px" />
+                                <object align="right">
+                                    <p:commandButton   value="Asignar" oncomplete="PF('wgMiAsignacion').show()" styleClass="BlueButton"
+                                                       update="diaMiAsignacion @parent" style="padding: 0px; border-radius: 0px;height: 30px;margin-top: -5px;margin-right: 10px">
+                                        <f:param name="idCodigo" value="#{miTramite.tramite_fk.tramite_codigo}"/>
+                                        <f:param name="idSeguimiento" value="#{miTramite.seguimiento_id}"/>
+                                        <f:param name="idTramite" value="#{miTramite.tramite_fk.tramite_id}"/>
+                                        <f:param name="idRol" value="#{miTramite.trabajo_fk.rol_usuario_fk.rol_id.rol_id}"/>
+                                        <f:param name="idUsuario" value="#{miTramite.trabajo_fk.rol_usuario_fk.usuario_id.usuario_id}"/>
+                                        <f:param name="idDepartamento" value="#{miTramite.trabajo_fk.departamento_fk.departamento_id}"/>
+                                    </p:commandButton>
+                                    <p:commandButton styleClass="RedButton" oncomplete="PF('wgTerminar').show()" update="diaTerminar @parent"
+                                                     value="Terminar" style=" padding: 0px; border-radius: 0px;height: 30px;margin-top: -5px;">
+                                        <f:param name="idCodigo" value="#{miTramite.tramite_fk.tramite_codigo}"/>
+                                        <f:param name="idSeguimiento" value="#{miTramite.seguimiento_id}"/>
+                                        <f:param name="idTramite" value="#{miTramite.tramite_fk.tramite_id}"/>
+                                        <f:param name="idRol" value="#{miTramite.trabajo_fk.rol_usuario_fk.rol_id.rol_id}"/>
+                                        <f:param name="idUsuario" value="#{miTramite.trabajo_fk.rol_usuario_fk.usuario_id.usuario_id}"/>
+                                        <f:param name="idDepartamento" value="#{miTramite.trabajo_fk.departamento_fk.departamento_id}"/>
+                                    </p:commandButton>
+                                </object>
+                            </f:facet>
+                                <h:outputText value="Historia del trámite:" />
+                                <p:tree value="#{treeControlador.cargarTree(miTramite.tramite_fk.tramite_id)}" var="tree"
+                                        orientation="horizontal" dynamic="true" animate="true" >
+                                    <p:treeNode>
+                                        <h:outputText value="#{tree}"/>
+                                        <p:commandLink style="width: 10px;margin-left: 20px" ajax="false" onclick="PrimeFaces.monitorDownload();"
+                                                       rendered="#{tree!='Registros'}">
+                                            <p:graphicImage value="/resources/imagenes/d_gris.png" style="width: 18px;height: 18px;margin-bottom: -4px"/>
+                                            <p:fileDownload value="#{treeControlador.download(tree,miTramite.tramite_fk.tramite_id)}"/>
+                                        </p:commandLink>
+                                    </p:treeNode>
+                                </p:tree>
+                        </p:tab>
+                    </p:accordionPanel>
+                </p:panel>
+            </h:form>
+        </ui:define>
+
+        <ui:define name="dialogos">
+            <p:dialog id="diaMiAsignacion" widgetVar="wgMiAsignacion" 
+                      modal="true"  resizable="false"
+                      showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
+                      width="1100" minHeight="320">
+                <f:facet name="header">
+                    <h:outputText value="Asignación de seguimiento del trámite: "/>
+                    <h:outputText value="#{param.get('idCodigo')}" style="color: #326499"/>
+                </f:facet>
+                <h:form enctype="multipart/form-data" id="frmMiAsignacion">
+                    <br/><h:outputText value="Asignación:" style="margin-left: 5%"/>
+                    <p:outputLabel value="Descripción del seguimiento:" style="margin-left: 45.5%"/><br/><br/>
+                    <object align="left" style="margin-left: 5%;margin-top: -0px;">
+                        <p:selectOneMenu id="selTrabajo" style="width: 296px"
+                                         value="#{asignacionControlador.strRolUsuarioDepartamento}">
+                            <f:selectItems var="asignacion" value="#{trabajoControlador.arrLisTrabajo}"
+                                           itemLabel="#{asignacion.rol_usuario_fk.usuario_id.usuario_nombre} #{asignacion.rol_usuario_fk.usuario_id.usuario_apellido} - #{asignacion.rol_usuario_fk.rol_id.rol_descripcion} - #{asignacion.departamento_fk.departamento_nombre}"
+                                           itemValue="#{asignacion.rol_usuario_fk.rol_id.rol_id}-#{asignacion.rol_usuario_fk.usuario_id.usuario_id}-#{asignacion.departamento_fk.departamento_id}"/>
+                        </p:selectOneMenu>
+                    </object>
+                    <p:inputTextarea value="#{asignacionControlador.objComentario.comentario_seguimiento_descripcion}"
+                                     style="width: 30%; margin-left: 21%;" autoResize="false" rows="7" maxlength="1000"
+                                     required="true"
+                                     requiredMessage="Ingrese una descripción y/o un comentario del seguimiento"/><br/>
+                    <object align="left" style="margin-left: 5%;margin-top: -100px">
+                        <p:outputLabel value="Plazo:" /><br/><br/>
+                        <p:calendar id="calAsignacion" widgetVar="cal" value="#{asignacionControlador.datPlazoAsignacion}"
+                                    mask="true" required="true" requiredMessage="Ingrese una fecha plazo"
+                                    mindate="PF('cal').today()+1" maxdate="PF('cal').today()+30"/>
+                    </object><br/>
+                    <p:commandButton id="cmdAsignacion" action="#{asignacionControlador.ingresoAsignacion()}"
+                                     value="Registrar" style="width: 32%;margin-left: 5%;margin-top: -300px"
+                                     oncomplete="#{miTramiteControlador.update()};handleSubmitMenu(args,'frmMiAsignacion');"
+                                     update="frmMiAsignacionTramite :frmMiAsignacion">
+                        <f:param name="idSeguimiento" value="#{param.get('idSeguimiento')}"/>
+                        <f:param name="idTramite" value="#{param.get('idTramite')}"/>
+                        <f:param name="idRol" value="#{param.get('idRol')}"/>
+                        <f:param name="idUsuario" value="#{param.get('idUsuario')}"/>
+                        <f:param name="idDepartamento" value="#{param.get('idDepartamento')}"/>
+                    </p:commandButton>
+                    <p:fileUpload value="#{asignacionControlador.uplTramite}" id="fluTramite"
+                                  allowTypes="/(\.|\/)(doc|docx|xls|xlsx|pdf|odt)$/"
+                                  cancelLabel="Cancelar" label="Buscar" uploadLabel="Subir"
+                                  style="margin-left: 57.5%;margin-top: -42px"
+                                  mode="advanced" dragDropSupport="false"
+                                  sizeLimit="10000000" fileLimit="5"
+                                  required="true" requiredMessage="Seleccione el documento del tramite a realizar."
+                                  invalidSizeMessage="El archivo es muy grande para ser subido."
+                                  fileLimitMessage="Solo se puede subir 1 archivo"
+                                  invalidFileMessage="El formato el archivo no es aceptado. (doc|docx|xls|xlsx|pdf|odt)"
+                                  fileUploadListener="#{asignacionControlador.fileUploadListener}"/><br/>
+                    <object align="left" style="margin-left: 58.5%; margin-top: -20px">
+                        <p:outputLabel id="outNombreArchivo" style="color: #67c232;"/>
+                    </object>
+                    <p:blockUI block="frmMiAsignacion" trigger="cmdAsignacion">
+                        <p:outputLabel value="Subiendo..."/>
+                        <p:graphicImage value="/resources/imagenes/ajax-loader.gif"/>
+                    </p:blockUI>
+                </h:form>
+            </p:dialog>
+
+            <p:dialog id="diaTerminar" widgetVar="wgTerminar" 
+                      modal="true"  resizable="false" 
+                      showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
+                      width="600" minHeight="440">
+                <f:facet name="header">
+                    <h:outputText value="Terminar el seguimiento del trámite: "/>
+                    <h:outputText value="#{param.get('idCodigo')}" style="color: #326499"/>
+                </f:facet>
+                <h:form enctype="multipart/form-data" id="frmTerminar">
+                    <h:outputText value="Comentario final:" style="margin-left: 5%"/><br/><br/>
+                    <p:inputTextarea value="#{asignacionControlador.objComentario.comentario_seguimiento_descripcion}"
+                                     style="width: 70%; margin-left: 5%;" autoResize="false" rows="7" maxlength="1000"
+                                     required="true"
+                                     requiredMessage="Ingrese una descripción y/o un comentario del seguimiento"/><br/><br/>
+                    <h:outputText value="Archivo final:" style="margin-left: 5%"/><br/><br/>
+                    <p:fileUpload value="#{asignacionControlador.uplTramite}" id="fluTramite"
+                                  allowTypes="/(\.|\/)(doc|docx|xls|xlsx|pdf|odt)$/"
+                                  cancelLabel="Cancelar" label="Buscar" uploadLabel="Subir"
+                                  style="margin-left: 4%;"
+                                  mode="advanced" dragDropSupport="false"
+                                  sizeLimit="10000000" fileLimit="5"
+                                  required="true" requiredMessage="Seleccione el documento del tramite a realizar."
+                                  invalidSizeMessage="El archivo es muy grande para ser subido."
+                                  fileLimitMessage="Solo se puede subir 1 archivo"
+                                  invalidFileMessage="El formato el archivo no es aceptado. (doc|docx|xls|xlsx|pdf|odt)"
+                                  fileUploadListener="#{asignacionControlador.fileUploadListenerTerminar}"/><br/>
+                    <object align="left" style="margin-left: 5%; margin-top: -20px">
+                        <p:outputLabel id="outNombreArchivo" style="color: #67c232;"/>
+                    </object><br/>
+                    <p:commandButton id="cmdAsignacion" action="#{asignacionControlador.terminar()}"
+                                     value="Registrar" style="width: 50%;margin-left: 5%;margin-top: -300px"
+                                     update="frmTerminar"
+                                     oncomplete="handleSubmitMenu(args,'frmTerminar');">
+                        <f:param name="idSeguimiento" value="#{param.get('idSeguimiento')}"/>
+                        <f:param name="idTramite" value="#{param.get('idTramite')}"/>
+                        <f:param name="idRol" value="#{param.get('idRol')}"/>
+                        <f:param name="idUsuario" value="#{param.get('idUsuario')}"/>
+                        <f:param name="idDepartamento" value="#{param.get('idDepartamento')}"/>
+                    </p:commandButton>
+                </h:form>
+            </p:dialog>
+        </ui:define>
+
+    </ui:composition>
+</html>
+

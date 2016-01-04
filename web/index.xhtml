@@ -2,8 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
         <link href="#{request.contextPath}/resources/imagenes/logo_systrack_s.ico" rel="shortcut icon"  type="image/x-icon" />
@@ -54,17 +53,18 @@
                         <center>
                             <br/><h:outputText value="Escriba aquí su código" style="font-size: large"/><br/>
                             <br/><p:separator style="width: 350px; border-top:1px dashed grey;border-bottom: none;border-right: none;border-left: none"/>
-                            <br/><p:inputText value="#{tramiteConsultaControlador.objTramite.tramite_codigo}"
+                            <br/><br/><p:inputText value="#{tramiteConsultaControlador.objTramite.tramite_codigo}"
                                               requiredMessage="Ingrese el código de su TRÁMITE" required="true" 
-                                              placeholder="Código de consulta" id="inpTramite"
+                                              placeholder="Código de consulta" id="inpTramite" maxlength="6"
                                               style="width: 300px;height: 25px; text-transform: uppercase"/><br/>
-                            <br/><p:selectBooleanCheckbox style="margin-left: -120px"/>
-                            <h:outputText value="Recordar mi código" style="margin-left: 30px"/>
-                            <br/><br/><br/><p:commandButton value="Buscar" style="width: 320px;background-color: #00897B"/>
+                            <br/>
+                            <br/><br/><br/><p:commandButton value="Buscar" style="width: 320px;background-color: #00897B"
+                                                            action="#{tramiteConsultaControlador.loginConsulta()}"/>
                         </center>
                     </p:panel>
                     <p:graphicImage value="/resources/imagenes/logo_tiwintza.png" style="width: 120px;height: 120px;margin-top: -20px;margin-left: 5%"/>
                 </h:form>
+                <p:growl id="grlMensajesIndex" autoUpdate="true" life="3000" showDetail="true"/>
             </p:layoutUnit>
         </p:layout>
 

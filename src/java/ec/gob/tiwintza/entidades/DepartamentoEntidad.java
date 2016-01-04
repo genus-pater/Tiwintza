@@ -63,6 +63,10 @@ public class DepartamentoEntidad {
         this.departamento_id = departamento_id;
     }
 
+    public DepartamentoEntidad(String departamento_nombre) {
+        this.departamento_nombre = departamento_nombre;
+    }
+
     public DepartamentoEntidad() {
     }
 

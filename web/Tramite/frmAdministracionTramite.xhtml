@@ -68,12 +68,11 @@
                                   required="true" requiredMessage="Seleccione el documento del tramite a realizar."
                                   invalidSizeMessage="El archivo es muy grande para ser subido."
                                   fileLimitMessage="Solo se puede subir 1 archivo"
-                                  invalidFileMessage="El formato el archivo no es aceptado."
+                                  invalidFileMessage="El formato el archivo no es aceptado. (doc|docx|xls|xlsx|pdf|odt)"
                                   fileUploadListener="#{tramiteControlador.fileUploadListener}"/>
                     <br/><br/><p:commandButton action="#{tramiteControlador.ingresarTramite()}" id="cmbTramite"
                                                value="Registrar" style="width: 32%;margin-left: 5%;margin-top: -300px"
-                                               oncomplete="handleSubmitMenu(args,'frmTramite');"
-                                               update=":frmTramite">
+                                               oncomplete="handleSubmitMenu(args,'frmTramite');">
                     </p:commandButton>
                     <object align="left" style="margin-left: 55.2%;margin-top: -60px">
                         <p:outputLabel id="outNombreArchivo" style="color: #67c232;"/>

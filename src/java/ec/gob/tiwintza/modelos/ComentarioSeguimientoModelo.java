@@ -37,7 +37,7 @@ public class ComentarioSeguimientoModelo {
             }
             conResultado = null;
         } catch (SQLException e) {
-            System.out.println("error" + e.getMessage());
+            throw e;
         }
         return booRespuesta;
     }

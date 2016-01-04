@@ -3,14 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/wmoina/Documentos/PRACTICAS/PROYECTOS/Tiwintza/src/java/ec/gob/tiwintza/controladores/EstadoControlador.java</file>
-            <file>file:/home/wmoina/Documentos/PRACTICAS/PROYECTOS/Tiwintza/src/java/ec/gob/tiwintza/entidades/Retraso_seguimientoEntidad.java</file>
-            <file>file:/home/wmoina/Documentos/PRACTICAS/PROYECTOS/Tiwintza/src/java/ec/gob/tiwintza/modelos/Retraso_seguimientoModelo.java</file>
-            <file>file:/home/wmoina/Documentos/PRACTICAS/PROYECTOS/Tiwintza/src/java/ec/gob/tiwintza/controladores/Retraso_seguimientoControlador.java</file>
-            <file>file:/home/wmoina/Documentos/PRACTICAS/PROYECTOS/Tiwintza/src/java/ec/gob/tiwintza/entidades/Reporte_tramiteEntidad.java</file>
-            <file>file:/home/wmoina/Documentos/PRACTICAS/PROYECTOS/Tiwintza/src/java/ec/gob/tiwintza/modelos/Reporte_tramiteModelo.java</file>
-            <file>file:/home/wmoina/Documentos/PRACTICAS/PROYECTOS/Tiwintza/src/java/ec/gob/tiwintza/controladores/Reporte_tramiteControlador.java</file>
-            <file>file:/home/wmoina/Documentos/PRACTICAS/PROYECTOS/Tiwintza/web/Reporte_tramite/frmAdministracionReporte_tramite.xhtml</file>
+            <file>file:/home/wmoina/Documentos/PRACTICAS/PROYECTOS/Tiwintza/src/java/ec/gob/tiwintza/controladores/TramiteAsignacionControlador.java</file>
+            <file>file:/home/wmoina/Documentos/PRACTICAS/PROYECTOS/Tiwintza/src/java/ec/gob/tiwintza/controladores/TramiteControlador.java</file>
+            <file>file:/home/wmoina/Documentos/PRACTICAS/PROYECTOS/Tiwintza/src/java/ec/gob/tiwintza/sesiones/SesionControlador.java</file>
         </group>
     </open-files>
 </project-private>

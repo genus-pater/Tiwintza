@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * @author eborja
  */
 public class TramiteModelo {
-
+    
     public static boolean eliminarTramite(long lonIdTramiteEliminar) throws Exception {
         String strQuery = "select bd_st.fn_delete_tramite(?)";
         boolean booResultado = false;
@@ -38,7 +38,7 @@ public class TramiteModelo {
         }
         return booResultado;
     }
-
+    
     public static long insertarTramite(TramiteEntidad objTramiteIngresar) throws Exception {
         long lonRespuesta = 0;
         try {
@@ -62,7 +62,7 @@ public class TramiteModelo {
         }
         return lonRespuesta;
     }
-
+    
     public static boolean actualizarTramiteCodigo(TramiteEntidad objTramiteActualizar) throws Exception {
         boolean booRespuesta = false;
         String strQuery = "select bd_st.fn_update_tramite_codigo(?,?)";
@@ -76,7 +76,7 @@ public class TramiteModelo {
             }
         }
         return booRespuesta;
-
+        
     }
     
     public static int actualizarTramiteAsignacio(TramiteEntidad objTramiteActualizar) throws Exception {
@@ -86,12 +86,24 @@ public class TramiteModelo {
         listParametros.add(new Parametro(1, objTramiteActualizar.getTramite_id()));
         ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strQuery, listParametros);
         while (conResultado.next()) {
-            intRespuesta=conResultado.getInt(0);
+            intRespuesta = conResultado.getInt(0);
         }
         return intRespuesta;
-
     }
-
+    
+    public static int actualizarTramiteTerminar(TramiteEntidad objTramiteActualizar) throws Exception {
+        int intRespuesta = 0;
+        String strQuery = "select bd_st.fn_update_tramite_finalizado(?,?)";
+        ArrayList<Parametro> listParametros = new ArrayList<>();
+        listParametros.add(new Parametro(1, objTramiteActualizar.getTramite_id()));
+        listParametros.add(new Parametro(2, objTramiteActualizar.getFecha_fin()));
+        ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strQuery, listParametros);
+        while (conResultado.next()) {
+            intRespuesta = conResultado.getInt(0);
+        }
+        return intRespuesta;
+    }
+    
     public static ArrayList<TramiteEntidad> obtenerTramite() throws Exception {
         ArrayList<TramiteEntidad> arrLstTramite = new ArrayList<>();
         try {
@@ -104,7 +116,39 @@ public class TramiteModelo {
         }
         return arrLstTramite;
     }
-
+    
+    public static String obtenerTramiteTree(long lonTraId) throws Exception {
+        String strRoot = "";
+        try {
+            String strSql = "call bd_st.pr_select_root(?); ";
+            ArrayList<Parametro> listParametros = new ArrayList<>();
+            listParametros.add(new Parametro(1, lonTraId));
+            ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strSql, listParametros);
+            while (conResultado.next()) {
+                strRoot = conResultado.getString(0) + ": " + conResultado.getString(1) + " " + conResultado.getString(2);
+            }
+            conResultado = null;
+        } catch (SQLException exConec) {
+            throw new Exception(exConec.getMessage());
+        }
+        return strRoot;
+    }
+    
+    public static ArrayList<TramiteEntidad> obtenerTramiteConsulta(String strTraCod) throws Exception {
+        ArrayList<TramiteEntidad> arrLstTramite = new ArrayList<>();
+        try {
+            String strSql = "call bd_st.pr_select_consulta(?); ";
+            ArrayList<Parametro> listParametros = new ArrayList<>();
+            listParametros.add(new Parametro(1, strTraCod));
+            ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strSql, listParametros);
+            arrLstTramite = llenarTramiteConsulta(conResultado);
+            conResultado = null;
+        } catch (SQLException exConec) {
+            throw new Exception(exConec.getMessage());
+        }
+        return arrLstTramite;
+    }
+    
     public static ArrayList<TramiteEntidad> llenarTramite(ConjuntoResultado conResultado) throws Exception {
         ArrayList<TramiteEntidad> arrLstTramite = new ArrayList<>();
         TramiteEntidad objTramite;
@@ -129,5 +173,31 @@ public class TramiteModelo {
         }
         return arrLstTramite;
     }
-
+    
+    public static ArrayList<TramiteEntidad> llenarTramiteConsulta(ConjuntoResultado conResultado) throws Exception {
+        ArrayList<TramiteEntidad> arrLstTramite = new ArrayList<>();
+        TramiteEntidad objTramite;
+        try {
+            while (conResultado.next()) {
+                if (!conResultado.getBoolean(10)) {
+                    objTramite = new TramiteEntidad(Long.parseLong(conResultado.getBigInteger(0).toString()),
+                            new TrabajoEntidad(new RolUsuarioEntidad(
+                                            new UsuarioEntidad(Long.parseLong(conResultado.getBigInteger(2).toString())),
+                                            new RolEntidad(Long.parseLong(conResultado.getBigInteger(1).toString()))),
+                                    new DepartamentoEntidad(Long.parseLong(conResultado.getBigInteger(3).toString()))),
+                            new TipoEntidad(Long.parseLong(conResultado.getBigInteger(4).toString())),
+                            new PersonaEntidad(Long.parseLong(conResultado.getBigInteger(5).toString()),
+                                    conResultado.getString(12), conResultado.getString(13)),
+                            conResultado.getTimeStamp(6), conResultado.getString(7), conResultado.getBoolean(8),
+                            conResultado.getBoolean(9), conResultado.getBoolean(10));
+                    arrLstTramite.add(objTramite);
+                }
+            }
+        } catch (Exception e) {
+            arrLstTramite.clear();
+            throw e;
+        }
+        return arrLstTramite;
+    }
+    
 }

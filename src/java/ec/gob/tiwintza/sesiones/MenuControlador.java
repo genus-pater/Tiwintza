@@ -41,11 +41,11 @@ public class MenuControlador {
 
     @PostConstruct
     public void init() {
-        try{
-        this.listarMenu();
-        this.setObjMenuModel(new DefaultMenuModel());
-        this.establecerPermisos();
-        }catch(Exception e){
+        try {
+            this.listarMenu();
+            this.setObjMenuModel(new DefaultMenuModel());
+            this.establecerPermisos();
+        } catch (Exception e) {
             try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("/Tiwintza");
             } catch (IOException ex) {
@@ -63,8 +63,9 @@ public class MenuControlador {
     }
 
     public void establecerPermisos() throws IOException {
-        for (MenuEntidad m : getLisMenus()) {
-            if (m.getMenu_tipo().equals("SubMenu") && verificar(m)) {
+        SesionUsuarioDataManager sesion = (SesionUsuarioDataManager) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("sesionUsuarioDataManager");
+        for (MenuEntidad m : sesion.getLisMenu()) {
+            if (m.getMenu_tipo().equals("SubMenu")) {
                 DefaultSubMenu firstSubmenu = new DefaultSubMenu(m.getMenu_nombre());
                 for (MenuEntidad i : getLisMenus()) {
                     MenuEntidad subMenu = i.getMenu();
@@ -90,7 +91,7 @@ public class MenuControlador {
     }
 
     public boolean verificar(MenuEntidad obj) throws IOException {
-            boolean res = false;
+        boolean res = false;
         try {
             SesionUsuarioDataManager sesion = (SesionUsuarioDataManager) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("sesionUsuarioDataManager");
             if (sesion.getSesionRolUsuarioActual().getRol_id().getRol_id() == obj.getRol_fk().getRol_id()) {
