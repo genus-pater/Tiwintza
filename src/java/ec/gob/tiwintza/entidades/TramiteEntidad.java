@@ -22,8 +22,23 @@ public class TramiteEntidad {
     private boolean tramite_estado;
     private boolean tramite_asignacion;
     private boolean tramite_eliminado;
+    private Timestamp fecha_fin;
 
     //<editor-fold defaultstate="collapsed" desc="Sets y Gets">
+    /**
+     * @return the fecha_fin
+     */
+    public Timestamp getFecha_fin() {
+        return fecha_fin;
+    }
+
+    /**
+     * @param fecha_fin the fecha_fin to set
+     */
+    public void setFecha_fin(Timestamp fecha_fin) {
+        this.fecha_fin = fecha_fin;
+    }
+
     /**
      * @return the tramite_eliminado
      */

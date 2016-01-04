@@ -18,6 +18,7 @@ public class SeguimientoEntidad {
     private TrabajoEntidad trabajo_fk;
     private Timestamp seguimiento_fecha_subida;
     private Timestamp seguimiento_fecha_lapso;
+    private Timestamp seguimiento_fecha_fin;
 
     //<editor-fold defaultstate="collapsed" desc="Sets y Gets">
     /**
@@ -89,6 +90,20 @@ public class SeguimientoEntidad {
     public void setSeguimiento_fecha_lapso(Timestamp seguimiento_fecha_lapso) {
         this.seguimiento_fecha_lapso = seguimiento_fecha_lapso;
     }
+
+    /**
+     * @return the seguimiento_fecha_fin
+     */
+    public Timestamp getSeguimiento_fecha_fin() {
+        return seguimiento_fecha_fin;
+    }
+
+    /**
+     * @param seguimiento_fecha_fin the seguimiento_fecha_fin to set
+     */
+    public void setSeguimiento_fecha_fin(Timestamp seguimiento_fecha_fin) {
+        this.seguimiento_fecha_fin = seguimiento_fecha_fin;
+    }
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Constructores">
 
@@ -99,9 +114,13 @@ public class SeguimientoEntidad {
         this.seguimiento_fecha_lapso = seguimiento_fecha_lapso;
     }
 
+    public SeguimientoEntidad(TrabajoEntidad trabajo_fk) {
+        this.trabajo_fk = trabajo_fk;
+    }
+
     public SeguimientoEntidad() {
-        trabajo_fk=new TrabajoEntidad();
-        tramite_fk=new TramiteEntidad();
+        trabajo_fk = new TrabajoEntidad();
+        tramite_fk = new TramiteEntidad();
     }
 
     public SeguimientoEntidad(long seguimiento_id, TramiteEntidad tramite_fk, TrabajoEntidad trabajo_fk, Timestamp seguimiento_fecha_subida, Timestamp seguimiento_fecha_lapso) {

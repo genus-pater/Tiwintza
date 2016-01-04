@@ -205,7 +205,7 @@ public class SesionControlador {
             }
             int intCon = 0;
             strUri = strUri.substring(15);
-            if (!strUri.equals("/templates/templateFormularios.xhtml")) {
+            if (!(strUri.equals("/templates/templateFormularios.xhtml")||strUri.equals("/Perfil/frmAdministracionPerfil.xhtml"))) {
                 for (MenuEntidad objAux : dm.getLisMenu()) {
                     if (objAux.getMenu_ruta() != null) {
                         if (objAux.getMenu_ruta().equals(strUri)) {

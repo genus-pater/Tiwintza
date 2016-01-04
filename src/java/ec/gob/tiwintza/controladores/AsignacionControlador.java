@@ -151,6 +151,8 @@ public class AsignacionControlador {
         objSeguimiento.getTrabajo_fk().getRol_usuario_fk().getRol_id().setRol_id(Long.parseLong(params.get("idRol")));
         objSeguimiento.getTrabajo_fk().getRol_usuario_fk().getUsuario_id().setUsuario_id(Long.parseLong(params.get("idUsuario")));
         objSeguimiento.getTrabajo_fk().getDepartamento_fk().setDepartamento_id(Long.parseLong(params.get("idDepartamento")));
+        objSeguimiento.getTramite_fk().setFecha_fin(new Timestamp(new Date().getTime()));
+        objSeguimiento.setSeguimiento_fecha_fin(new Timestamp(new Date().getTime()));
         objComentario.setSeguimiento_fk(objSeguimiento);
         if (uplTramite != null) {
             InputStream inpStream = uplTramite.getInputstream();
@@ -162,6 +164,28 @@ public class AsignacionControlador {
             if (ComentarioSeguimientoModelo.insertarComentarioSeguimiento(objComentario)) {
                 if (SeguimientoArchivoModelo.insertarSeguimientoArchivo(new SeguimientoArchivoEntidad(objSeguimiento,
                         bloAux, strTipo, strNombre))) {
+                    if (SeguimientoModelo.actualizarSeguimientoFechaFin(objSeguimiento) > 0) {
+                        if (TramiteModelo.actualizarTramiteTerminar(objSeguimiento.getTramite_fk()) > 0) {
+                            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("asignacionControlador");
+                            RequestContext.getCurrentInstance().update("frmMiAsignacionTramite:pnlMiTramite");
+                            Util.addSuccessMessage("Se concluyó con éxito el seguimiento del tramite.");
+                            this.destroy();
+                            RequestContext.getCurrentInstance().execute("{PF('wgTerminar').hide()}");
+                        } else {
+                            Util.addErrorMessage("No se pudo terminar el Trámite.");
+                        }
+                    } else {
+                        Util.addErrorMessage("No se pudo terminar el Trámite.");
+                    }
+                } else {
+                    Util.addErrorMessage("No se pudo terminar el Trámite.");
+                }
+            } else {
+                Util.addErrorMessage("No se pudo terminar el Trámite.");
+            }
+        } else {
+            if (ComentarioSeguimientoModelo.insertarComentarioSeguimiento(objComentario)) {
+                if (SeguimientoModelo.actualizarSeguimientoFechaFin(objSeguimiento) > 0) {
                     if (TramiteModelo.actualizarTramiteTerminar(objSeguimiento.getTramite_fk()) > 0) {
                         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("asignacionControlador");
                         RequestContext.getCurrentInstance().update("frmMiAsignacionTramite:pnlMiTramite");
@@ -177,26 +201,11 @@ public class AsignacionControlador {
             } else {
                 Util.addErrorMessage("No se pudo terminar el Trámite.");
             }
-        } else {
-            if (ComentarioSeguimientoModelo.insertarComentarioSeguimiento(objComentario)) {
-                if (TramiteModelo.actualizarTramiteTerminar(objSeguimiento.getTramite_fk()) > 0) {
-                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("asignacionControlador");
-                    RequestContext.getCurrentInstance().update("frmMiAsignacionTramite:pnlMiTramite");
-                    Util.addSuccessMessage("Se concluyó con éxito el seguimiento del tramite.");
-                    this.destroy();
-                    RequestContext.getCurrentInstance().execute("{PF('wgTerminar').hide()}");
-                } else {
-                    Util.addErrorMessage("No se pudo terminar el Trámite.");
-                }
-            } else {
-                Util.addErrorMessage("No se pudo terminar el Trámite.");
-            }
         }
     }
 
     public void ingresoAsignacion() {
         try {
-            long lonAsignamientoId = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("idSeguimiento"));
             String[] strIds = strRolUsuarioDepartamento.split("-");
             if (uplTramite != null) {
                 InputStream inpStream = uplTramite.getInputstream();
@@ -216,17 +225,23 @@ public class AsignacionControlador {
                 if (ComentarioSeguimientoModelo.insertarComentarioSeguimiento(objComentario)) {
                     if (SeguimientoArchivoModelo.insertarSeguimientoArchivo(new SeguimientoArchivoEntidad(objSeguimiento,
                             bloAux, strTipo, strNombre))) {
-                        objSeguimiento.getTrabajo_fk().getRol_usuario_fk().getRol_id().setRol_id(Long.parseLong(strIds[0]));
-                        objSeguimiento.getTrabajo_fk().getRol_usuario_fk().getUsuario_id().setUsuario_id(Long.parseLong(strIds[1]));
-                        objSeguimiento.getTrabajo_fk().getDepartamento_fk().setDepartamento_id(Long.parseLong(strIds[2]));
-                        objSeguimiento.setSeguimiento_fecha_lapso(new Timestamp(datPlazoAsignacion.getTime()));
-                        if (SeguimientoModelo.insertarSeguimiento(objSeguimiento) > 0) {
-                            if (SeguimientoModelo.actualizarSeguimientoAsignacion(objSeguimiento) > 0) {
-                                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("asignacionControlador");
-                                RequestContext.getCurrentInstance().update("frmMiAsignacionTramite:pnlMiTramite");
-                                Util.addSuccessMessage("Se asignó correctamente el seguimiento del Trámite.");
-                                this.destroy();
-                                RequestContext.getCurrentInstance().execute("{PF('wgMiAsignacion').hide()}");
+                        objSeguimiento.setSeguimiento_fecha_fin(new Timestamp(new Date().getTime()));
+                        if (SeguimientoModelo.actualizarSeguimientoFechaFin(objSeguimiento) > 0) {
+                            objSeguimiento.getTrabajo_fk().getRol_usuario_fk().getRol_id().setRol_id(Long.parseLong(strIds[0]));
+                            objSeguimiento.getTrabajo_fk().getRol_usuario_fk().getUsuario_id().setUsuario_id(Long.parseLong(strIds[1]));
+                            objSeguimiento.getTrabajo_fk().getDepartamento_fk().setDepartamento_id(Long.parseLong(strIds[2]));
+                            objSeguimiento.setSeguimiento_fecha_lapso(new Timestamp(datPlazoAsignacion.getTime()));
+                            if (SeguimientoModelo.insertarSeguimiento(objSeguimiento) > 0) {
+                                if (SeguimientoModelo.actualizarSeguimientoAsignacion(objSeguimiento) > 0) {
+                                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("asignacionControlador");
+                                    RequestContext.getCurrentInstance().update("frmMiAsignacionTramite:pnlMiTramite");
+                                    Util.addSuccessMessage("Se asignó correctamente el seguimiento del Trámite.");
+                                    this.destroy();
+                                    RequestContext.getCurrentInstance().execute("{PF('wgMiAsignacion').hide()}");
+
+                                } else {
+                                    Util.addErrorMessage("No se pudo asigar correctamente el seguimiento del Trámite.");
+                                }
                             } else {
                                 Util.addErrorMessage("No se pudo asigar correctamente el seguimiento del Trámite.");
                             }
