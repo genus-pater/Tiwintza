@@ -11,6 +11,8 @@
 
         <ui:define name="contenido">
             <h:form id="frmAsignacionTramite" style="margin-top: -3.2px">
+                 <p:graphicImage  rendered="#{tramiteAsignacionControlador.arrLisTramite.size()>0 eq false}" value="/resources/imagenes/logo_fondo.png"
+                                     style="background: no-repeat;max-width: 100%;max-height: 100%; position: absolute;top: 50%;left: 50%; transform: translate(-50%,-50%);"/>
                 <p:dataTable id="datTramite" value="#{tramiteAsignacionControlador.arrLisTramite}" var="tramite" 
                              lazy="true" scrollable="true" liveScroll="true" scrollRows="15" scrollHeight="449"
                              stickyHeader="false" rowStyleClass="#{tramite.tramite_estado==false?'red':'red'}"

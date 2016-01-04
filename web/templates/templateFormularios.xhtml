@@ -120,9 +120,9 @@
                     <p:accordionPanel  rendered="#{request.requestURI == '/Tiwintza/faces/templates/templateFormularios.xhtml' and notificacionControlador.arrLisNotificacion.size()!=0}" activeIndex="null" value="#{notificacionControlador.arrLisNotificacion}" var="notificacion" multiple="true">
                         <p:ajax event="tabChange" listener="#{notificacionControlador.actualizarNotificacion(notificacion.notificacion_id)}" />
                         <p:ajax event="tabClose" listener="#{notificacionControlador.actualizarNotificacion(notificacion.notificacion_id)}" update=":frmNotifi" />
-                        <p:tab  title=" Trámite asignado con código: #{notificacion.notificacion_id}">
+                        <p:tab  title=" Trámite asignado con código: #{notificacion.tramite_codigo}">
                             <h:panelGrid columns="2" cellpadding="10" style="border-color: white ">
-                                <h:outputText value="Estimado #{sesionControlador.nombreApellido()} se le ha signado un nuevo tramite con nombre:  #{notificacion.notificacion_desctipcion}">
+                                <h:outputText value="Estimado #{sesionControlador.nombreApellido()} se le ha signado un nuevo trámite con nombre:  #{notificacion.notificacion_desctipcion} y código de seguimiento #{notificacion.notificacion_id}">
                                     <f:param name="prmIdTipoEliminar" id="prmIdTipoEliminar" value="#{notificacion.notificacion_id}"/>   
                                 </h:outputText>
                             </h:panelGrid>

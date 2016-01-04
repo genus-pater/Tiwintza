@@ -33,7 +33,7 @@ public class Reporte_tramiteModelo {
         Reporte_tramiteEntidad objReporte_tramite;
         try {
             while (conResultado.next()) {
-                objReporte_tramite = new Reporte_tramiteEntidad(Long.parseLong(conResultado.getBigInteger(0).toString()), conResultado.getString(1), conResultado.getString(2),Long.parseLong(conResultado.getBigInteger(0).toString()));
+                objReporte_tramite = new Reporte_tramiteEntidad(Long.parseLong(conResultado.getBigInteger(0).toString()), conResultado.getString(1), conResultado.getString(2),Long.parseLong(conResultado.getBigInteger(3).toString()));
                 arrLstReporte_tramite.add(objReporte_tramite);
             }
         } catch (Exception e) {

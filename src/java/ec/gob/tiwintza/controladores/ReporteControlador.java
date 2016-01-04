@@ -145,7 +145,7 @@ public class ReporteControlador {
         Date fecha = new Date(cal.getTimeInMillis());
         SimpleDateFormat formato = new SimpleDateFormat();
 
-        String Fecha = "                                  Fecha: ";
+        String Fecha = "        Fecha: ";
         Chunk chunkTunning3 = new Chunk(Fecha, FontFactory.getFont(FontFactory.COURIER, 12, Font.BOLD, Color.BLACK));
         pdf.add(chunkTunning3);
 
@@ -163,7 +163,7 @@ public class ReporteControlador {
         Chunk chunkTunning5 = new Chunk(depar, FontFactory.getFont(FontFactory.COURIER, 12, Font.NORMAL, Color.BLACK));
         pdf.add(chunkTunning5);
 
-        String Acceder = "                                             Acceder: ";
+        String Acceder = "                                  Acceder: ";
         Chunk chunkTunning6 = new Chunk(Acceder, FontFactory.getFont(FontFactory.COURIER, 12, Font.BOLD, Color.BLACK));
         pdf.add(chunkTunning6);
 
