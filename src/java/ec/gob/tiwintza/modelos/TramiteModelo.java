@@ -204,7 +204,7 @@ public class TramiteModelo {
                                     new DepartamentoEntidad(Long.parseLong(conResultado.getBigInteger(3).toString()))),
                             new TipoEntidad(Long.parseLong(conResultado.getBigInteger(4).toString())),
                             new PersonaEntidad(Long.parseLong(conResultado.getBigInteger(5).toString()),
-                                    conResultado.getString(12), conResultado.getString(13)),
+                                    conResultado.getString(13), conResultado.getString(14)),
                             conResultado.getTimeStamp(6), conResultado.getString(7), conResultado.getBoolean(8),
                             conResultado.getBoolean(9), conResultado.getBoolean(10));
                     arrLstTramite.add(objTramite);
