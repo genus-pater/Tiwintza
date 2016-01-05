@@ -42,8 +42,9 @@
                     <center>
                         <h:outputText value="® Derechos de autor GAD Municipal de Tiwintza &amp; " 
                                       style="color: white;font-size: larger"/>
-                        <h:outputText value="LEWISA.SA" 
-                                      style="color: #2bb673;font-size: larger"/>
+                        <a href="javascript:" onclick="window.open('http://www.facebook.com/disruptiveLogyc');" 
+                           target="_blank"><h:outputLabel value="disruptiveLogic" 
+                                                       style="color: #2bb673;font-size: larger;cursor: pointer"/></a>
                     </center>
                 </p:panel>
             </p:layoutUnit>
@@ -54,9 +55,9 @@
                             <br/><h:outputText value="Escriba aquí su código" style="font-size: large"/><br/>
                             <br/><p:separator style="width: 350px; border-top:1px dashed grey;border-bottom: none;border-right: none;border-left: none"/>
                             <br/><br/><p:inputText value="#{tramiteConsultaControlador.objTramite.tramite_codigo}"
-                                              requiredMessage="Ingrese el código de su TRÁMITE" required="true" 
-                                              placeholder="Código de consulta" id="inpTramite" maxlength="6"
-                                              style="width: 300px;height: 25px; text-transform: uppercase"/><br/><br/>
+                                                   requiredMessage="Ingrese el código de su TRÁMITE" required="true" 
+                                                   placeholder="Código de consulta" id="inpTramite" maxlength="6"
+                                                   style="width: 300px;height: 25px; text-transform: uppercase"/><br/><br/>
                             <br/><p:commandButton value="Buscar" style="width: 320px;background-color: #00897B"
                                                   action="#{tramiteConsultaControlador.loginConsulta()}"/><br/><br/>
                             <p:graphicImage value="/resources/imagenes/logo_systrack_s.png" id="kk"
