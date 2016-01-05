@@ -56,7 +56,8 @@ public class NotificacionModelo {
         NotificacionEntidad objNotificacion;
         try {
             while (conResultado.next()) {
-                objNotificacion = new NotificacionEntidad(Long.parseLong(conResultado.getBigInteger(1).toString()), Long.parseLong(conResultado.getBigInteger(2).toString()), conResultado.getString(0));
+                objNotificacion = new NotificacionEntidad(Long.parseLong(conResultado.getBigInteger(1).toString()), 
+                        Long.parseLong(conResultado.getBigInteger(2).toString()), conResultado.getString(0),conResultado.getString(3));
                 arrLstNotificacion.add(objNotificacion);
             }
         } catch (Exception e) {

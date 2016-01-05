@@ -138,6 +138,7 @@ public class SesionControlador {
     public void cambioRol() throws IOException {
         try {
             dm.getSesionRolUsuarioActual().getRol_id().setRol_id(intIdRol);
+
             String strQuery = "call bd_st.pr_select_trabajo_sesion(" + dm.getSesionUsuarioActual().getUsuario_id() + "," + dm.getSesionRolUsuarioActual().getRol_id().getRol_id() + ")";
             ArrayList<TrabajoEntidad> arrLisTrabajoAux = TrabajoModelo.obtenerTrabajo(strQuery);
             if (!arrLisTrabajoAux.isEmpty()) {
@@ -145,6 +146,7 @@ public class SesionControlador {
             } else {
                 this.dm.setSesionTrabajoUsuarioActual(new TrabajoEntidad(new DepartamentoEntidad("", "Sin asignar")));
             }
+
             this.dm.setLisMenu(MenuModelo.obtenerMenuSesion(dm.getSesionRolUsuarioActual().getRol_id().getRol_id()));
             FacesContext.getCurrentInstance().getExternalContext().redirect("/Tiwintza/faces/templates/templateFormularios.xhtml");
         } catch (Exception e) {

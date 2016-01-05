@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/templates/templateFormularios.xhtml">
+        <ui:define name="top">
+        </ui:define>
+
+        <ui:define name="contenido">
+
+            <p:separator style="backface-visibility: hidden"/>
+            <p:panel>
+                <h:form id="frmReporte">
+                    <p:dataTable id="datReporte" value="#{dtFilterView.arrLisReporte}" var="reporte" paginator="true" rows="100" 
+                                 selectionMode="single" selection="#{dtFilterView.objEntidad}" rowKey="#{reporte.seguimiento_id}" 
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+                                 rowsPerPageTemplate="5,10,15" widgetVar="reporteTabla" 
+                                 emptyMessage="No se encontraron coincidencias intente de nuevo por favor."  
+                                 filteredValue="#{dtFilterView.arrLisReporte2}" >
+
+                        <f:facet name="header"  >
+                            Emisión de reportes
+                            <h:commandLink>
+                                <p:graphicImage value="/resources/imagenes/pdf.png" width="40px" height="30px" style="float: right"  />
+                                <p:dataExporter type="pdf" target="datReporte" fileName="Reporte" pageOnly="true" preProcessor="#{dtFilterView.preProcessPDF}" encoding="ISO-8859-1"/>
+                            </h:commandLink>
+                            <p:commandButton id="toggler" type="button" value="Columnas" style="float: left; height: 30px" icon="ui-icon-calculator" />
+                            <p:columnToggler datasource="datReporte" trigger="toggler" />
+                        </f:facet>
+                        <p:column filterBy="#{reporte.tramite_estado}" headerText="Estado del trámite" filterMatchMode="equals" >
+                            <f:facet name="filter">
+                                <p:selectOneRadio onchange="PF('reporteTabla').filter()">
+                                    <f:converter converterId="javax.faces.Boolean" />
+                                    <f:selectItem itemLabel="T" itemValue="" />
+                                    <f:selectItem itemLabel="F" itemValue="true" />
+                                    <f:selectItem itemLabel="A" itemValue="false" />
+                                </p:selectOneRadio>
+                            </f:facet>
+                            <h:outputText value="#{reporte.tramite_estado ? 'Finalizado': 'Activo'}" />
+                        </p:column>
+                        <p:column headerText="Código trámite" sortBy="#{reporte.tramite_codigo}" filterBy="#{reporte.tramite_codigo}" >
+                            <h:outputText value="#{reporte.tramite_codigo}"/>
+                        </p:column>
+                        <p:column headerText="Decripción" sortBy="#{reporte.seguimiento_descripcion}" filterBy="#{reporte.seguimiento_descripcion}"  filterMatchMode="contains">
+                            <h:outputText value="#{reporte.seguimiento_descripcion}"/>
+                        </p:column>
+                        <p:column headerText="Departamento" sortBy="#{reporte.deparftamento_nombre}" filterBy="#{reporte.deparftamento_nombre}" filterMatchMode="contains">
+                            <h:outputText value="#{reporte.deparftamento_nombre}"/>
+                        </p:column>
+                        <p:column headerText="Asignado a" sortBy="#{reporte.usuario_nombre}" filterBy="#{reporte.usuario_nombre} #{reporte.usuario_apellido}" filterMatchMode="contains">
+                            <h:outputText value="#{reporte.usuario_nombre} #{reporte.usuario_apellido}"/>
+                        </p:column>
+                        <p:column  headerText="Correo" sortBy="#{reporte.usuario_email}" exportable="false" filterBy="#{reporte.usuario_email}" filterMatchMode="contains">
+                            <h:outputText value="#{reporte.usuario_email}"/>
+                        </p:column>
+                        <p:column headerText="Fecha inicio" sortBy="#{reporte.fecha_subida.toGMTString.subSequence(0,11)}" filterBy="#{reporte.fecha_subida.toGMTString().subSequence(0,11)}"  filterMatchMode="contains">
+                            <h:outputText value="#{reporte.fecha_subida.toGMTString().subSequence(0,11)}"/>
+                        </p:column>
+                        <p:column headerText="Fecha fin" sortBy="#{reporte.fecha_lapso.toGMTString().subSequence(0,11)}" filterBy="#{reporte.fecha_lapso.toGMTString().subSequence(0,11)}" filterMatchMode="contains">
+                            <h:outputText value="#{reporte.fecha_lapso.toGMTString().subSequence(0,11)}"/>
+                        </p:column>
+                    </p:dataTable>
+
+                </h:form>
+
+            </p:panel>
+        </ui:define>
+    </ui:composition>
+</html>

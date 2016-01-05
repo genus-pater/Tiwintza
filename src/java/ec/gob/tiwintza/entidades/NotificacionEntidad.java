@@ -14,8 +14,19 @@ public class NotificacionEntidad {
     private long notificacion_id;
     private long notificacion_estado;
     private String notificacion_desctipcion;
+    private String tramite_codigo;
 
     //<editor-fold defaultstate="collapsed" desc="Sets y Gets">  
+
+    public String getTramite_codigo() {
+        return tramite_codigo;
+    }
+
+    public void setTramite_codigo(String tramite_codigo) {
+        this.tramite_codigo = tramite_codigo;
+    }
+    
+    
     public long getNotificacion_id() {
         return notificacion_id;
     }
@@ -42,11 +53,12 @@ public class NotificacionEntidad {
 
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Constructores">
-    
-    public NotificacionEntidad(long notificacion_id, long notificacion_estado, String notificacion_desctipcion) {
+
+    public NotificacionEntidad(long notificacion_id, long notificacion_estado, String notificacion_desctipcion, String tramite_codigo) {
         this.notificacion_id = notificacion_id;
         this.notificacion_estado = notificacion_estado;
         this.notificacion_desctipcion = notificacion_desctipcion;
+        this.tramite_codigo = tramite_codigo;
     }
 
     public NotificacionEntidad() {
