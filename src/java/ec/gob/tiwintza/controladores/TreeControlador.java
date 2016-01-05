@@ -7,6 +7,7 @@ package ec.gob.tiwintza.controladores;
 
 import ec.edu.espoch.sga.recursos.Util;
 import ec.gob.tiwintza.entidades.ArchivoEntidad;
+import ec.gob.tiwintza.entidades.ComentarioSeguimientoEntidad;
 import ec.gob.tiwintza.entidades.SeguimientoArchivoEntidad;
 import ec.gob.tiwintza.entidades.SeguimientoEntidad;
 import ec.gob.tiwintza.modelos.ArchivoModelo;
@@ -79,7 +80,17 @@ public class TreeControlador {
     }
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Funciones">
-
+    public String ultimoComentario(long lonTraId,String strCod) throws Exception{
+        String strComentario="";
+        ArrayList<ComentarioSeguimientoEntidad> arrLisCom=SeguimientoModelo.obtenerSeguimientoConsulta(strCod);
+        if(arrLisCom.size()<1){
+            strComentario = TramiteModelo.obtenerTramiteTreeComentario(lonTraId);
+        }else{
+            strComentario=arrLisCom.get(arrLisCom.size()-1).getComentario_seguimiento_descripcion();
+        }
+        return strComentario;
+    }
+    
     public TreeNode cargarTree(long lonTraId) {
         try {
             arrListSeguimiento = SeguimientoModelo.obtenerSeguimientoTree(lonTraId);
@@ -107,6 +118,23 @@ public class TreeControlador {
                 ArchivoEntidad objArchivo = ArchivoModelo.obtenerArchivoBlob(lonTraId);
                 strFile = new DefaultStreamedContent(objArchivo.getArchivo_blob().getBinaryStream(), objArchivo.getArchivo_tipo(), objArchivo.getArchivo_nombre());
             }else{
+                SeguimientoArchivoEntidad objArchivo=SeguimientoArchivoModelo.obtenerSeguimientoArchivoBlob(arrListSeguimiento.get(Integer.parseInt(strNum)-2));
+                strFile = new DefaultStreamedContent(objArchivo.getSeguimiento_archivo_blob().getBinaryStream(), objArchivo.getSeguimiento_archivo_tipo(), objArchivo.getSeguimiento_archivo_nombre());
+            }
+        } catch (Exception e) {
+            Util.addErrorMessage("No se ha subido un archivo todavía. "+ e.getMessage());
+        }
+        return strFile;
+    }
+    
+    public StreamedContent downloadSeguimiento(String strAux, long lonTraId) throws Exception {
+        try {
+            String strNum = strAux.substring(0, 1);
+            if (strNum.equals("1")) {
+                ArchivoEntidad objArchivo = ArchivoModelo.obtenerArchivoBlob(lonTraId);
+                strFile = new DefaultStreamedContent(objArchivo.getArchivo_blob().getBinaryStream(), objArchivo.getArchivo_tipo(), objArchivo.getArchivo_nombre());
+            }else{
+                arrListSeguimiento = SeguimientoModelo.obtenerSeguimientoTree(lonTraId);
                 SeguimientoArchivoEntidad objArchivo=SeguimientoArchivoModelo.obtenerSeguimientoArchivoBlob(arrListSeguimiento.get(Integer.parseInt(strNum)-2));
                 strFile = new DefaultStreamedContent(objArchivo.getSeguimiento_archivo_blob().getBinaryStream(), objArchivo.getSeguimiento_archivo_tipo(), objArchivo.getSeguimiento_archivo_nombre());
             }

@@ -27,7 +27,7 @@
                                               style="margin-left: 100px" />
                                 <object align="right">
                                     <p:commandButton   value="Asignar" oncomplete="PF('wgMiAsignacion').show()" styleClass="BlueButton"
-                                                       update="diaMiAsignacion @parent" style="padding: 0px; border-radius: 0px;height: 30px;margin-top: -5px;margin-right: 10px">
+                                                       update="diaMiAsignacion @parent" style="padding: 0px; border-radius: 0px;height: 30px;margin-top: -5px;margin-right: 10px;width: 120px">
                                         <f:param name="idCodigo" value="#{miTramite.tramite_fk.tramite_codigo}"/>
                                         <f:param name="idSeguimiento" value="#{miTramite.seguimiento_id}"/>
                                         <f:param name="idTramite" value="#{miTramite.tramite_fk.tramite_id}"/>
@@ -36,7 +36,7 @@
                                         <f:param name="idDepartamento" value="#{miTramite.trabajo_fk.departamento_fk.departamento_id}"/>
                                     </p:commandButton>
                                     <p:commandButton styleClass="RedButton" oncomplete="PF('wgTerminar').show()" update="diaTerminar @parent"
-                                                     value="Terminar" style=" padding: 0px; border-radius: 0px;height: 30px;margin-top: -5px;">
+                                                     value="Terminar" style=" padding: 0px; border-radius: 0px;height: 30px;margin-top: -5px;width: 120px">
                                         <f:param name="idCodigo" value="#{miTramite.tramite_fk.tramite_codigo}"/>
                                         <f:param name="idSeguimiento" value="#{miTramite.seguimiento_id}"/>
                                         <f:param name="idTramite" value="#{miTramite.tramite_fk.tramite_id}"/>
@@ -46,18 +46,22 @@
                                     </p:commandButton>
                                 </object>
                             </f:facet>
-                                <h:outputText value="Historia del trámite:" />
-                                <p:tree value="#{treeControlador.cargarTree(miTramite.tramite_fk.tramite_id)}" var="tree"
-                                        orientation="horizontal" dynamic="true" animate="true" >
-                                    <p:treeNode>
-                                        <h:outputText value="#{tree}"/>
-                                        <p:commandLink style="width: 10px;margin-left: 20px" ajax="false" onclick="PrimeFaces.monitorDownload();"
-                                                       rendered="#{tree!='Registros'}">
-                                            <p:graphicImage value="/resources/imagenes/d_gris.png" style="width: 18px;height: 18px;margin-bottom: -4px"/>
-                                            <p:fileDownload value="#{treeControlador.download(tree,miTramite.tramite_fk.tramite_id)}"/>
-                                        </p:commandLink>
-                                    </p:treeNode>
-                                </p:tree>
+                            <h:outputText value="Historia del trámite:" />
+                            <p:tree value="#{treeControlador.cargarTree(miTramite.tramite_fk.tramite_id)}" var="tree"
+                                    orientation="horizontal" dynamic="true" animate="true" >
+                                <p:treeNode>
+                                    <h:outputText value="#{tree}"/>
+                                    <p:commandLink style="width: 10px;margin-left: 20px" ajax="false" onclick="PrimeFaces.monitorDownload();"
+                                                   rendered="#{tree!='Registros'}">
+                                        <p:graphicImage value="/resources/imagenes/d_gris.png" style="width: 18px;height: 18px;margin-bottom: -4px"/>
+                                        <p:fileDownload value="#{treeControlador.download(tree,miTramite.tramite_fk.tramite_id)}"/>
+                                    </p:commandLink>
+                                </p:treeNode>
+                            </p:tree><br/>
+                            <h:outputText value="Último comentario del seguimiento:" /><br/>
+                            <object align="left">
+                                #{treeControlador.ultimoComentario(miTramite.tramite_fk.tramite_id, miTramite.tramite_fk.tramite_codigo)}
+                            </object>
                         </p:tab>
                     </p:accordionPanel>
                 </p:panel>

@@ -8,7 +8,6 @@ package ec.gob.tiwintza.controladores;
 import ec.edu.espoch.sga.recursos.Util;
 import ec.gob.tiwintza.entidades.ComentarioSeguimientoEntidad;
 import ec.gob.tiwintza.entidades.TramiteEntidad;
-import ec.gob.tiwintza.modelos.SeguimientoArchivoModelo;
 import ec.gob.tiwintza.modelos.SeguimientoModelo;
 import ec.gob.tiwintza.modelos.TramiteModelo;
 import java.io.IOException;
@@ -128,6 +127,9 @@ public class TramiteConsultaControlador {
             }
         } catch (Exception e) {
             int kk = 0;
+        }
+        if (intLen <= 100) {
+            strRes = strDes;
         }
         return strRes;
     }

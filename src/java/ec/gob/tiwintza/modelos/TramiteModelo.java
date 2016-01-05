@@ -134,6 +134,23 @@ public class TramiteModelo {
         return strRoot;
     }
     
+    public static String obtenerTramiteTreeComentario(long lonTraId) throws Exception {
+        String strRoot = "";
+        try {
+            String strSql = "call bd_st.pr_select_root(?); ";
+            ArrayList<Parametro> listParametros = new ArrayList<>();
+            listParametros.add(new Parametro(1, lonTraId));
+            ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strSql, listParametros);
+            while (conResultado.next()) {
+                strRoot =  conResultado.getString(3);
+            }
+            conResultado = null;
+        } catch (SQLException exConec) {
+            throw new Exception(exConec.getMessage());
+        }
+        return strRoot;
+    }
+    
     public static ArrayList<TramiteEntidad> obtenerTramiteConsulta(String strTraCod) throws Exception {
         ArrayList<TramiteEntidad> arrLstTramite = new ArrayList<>();
         try {

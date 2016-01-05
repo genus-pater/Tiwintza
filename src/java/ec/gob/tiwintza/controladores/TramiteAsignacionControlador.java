@@ -193,6 +193,8 @@ public class TramiteAsignacionControlador {
     public void rowEnable(){
         if(objSelTramite.isTramite_asignacion()==false){
             RequestContext.getCurrentInstance().execute("{PF('diaAsignacionTramite').show()}");
+        }else{
+            RequestContext.getCurrentInstance().execute("{PF('wgSeguimiento').show()}");
         }
     }
 

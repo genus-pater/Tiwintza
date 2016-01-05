@@ -11,14 +11,14 @@
 
         <ui:define name="contenido">
             <h:form id="frmAsignacionTramite" style="margin-top: -3.2px">
-                 <p:graphicImage  rendered="#{tramiteAsignacionControlador.arrLisTramite.size()>0 eq false}" value="/resources/imagenes/logo_fondo.png"
-                                     style="background: no-repeat;max-width: 100%;max-height: 100%; position: absolute;top: 50%;left: 50%; transform: translate(-50%,-50%);"/>
+                <p:graphicImage  rendered="#{tramiteAsignacionControlador.arrLisTramite.size()>0 eq false}" value="/resources/imagenes/logo_fondo.png"
+                                 style="background: no-repeat;max-width: 100%;max-height: 100%; position: absolute;top: 50%;left: 50%; transform: translate(-50%,-50%);"/>
                 <p:dataTable id="datTramite" value="#{tramiteAsignacionControlador.arrLisTramite}" var="tramite" 
                              lazy="true" scrollable="true" liveScroll="true" scrollRows="15" scrollHeight="449"
                              stickyHeader="false" rowStyleClass="#{tramite.tramite_estado==false?'red':'red'}"
                              selectionMode="single" selection="#{tramiteAsignacionControlador.objSelTramite}" rowKey="#{tramite.tramite_id}"
                              rendered="#{tramiteAsignacionControlador.arrLisTramite.size() > 0 eq true}">
-                    <p:ajax event="rowSelect"  listener="#{tramiteAsignacionControlador.rowEnable()}" update=":diaAsignacion @parent">
+                    <p:ajax event="rowSelect"  listener="#{tramiteAsignacionControlador.rowEnable()}" update=":diaAsignacion :dlgSeguimiento @parent">
                         <f:setPropertyActionListener target="#{tramiteAsignacionControlador.objSelTramite}" value="#{tramite}"/>
                     </p:ajax>
                     <p:column id="colId" headerText="Código de consulta">
@@ -99,6 +99,30 @@
                             <f:param name="prmIdTramiteEliminar" value="#{param.get('prmIdTramiteEliminar')}"/>
                         </p:commandButton>
                     </center>
+                </h:form>
+            </p:dialog>
+
+            <p:dialog id="dlgSeguimiento" widgetVar="wgSeguimiento" header="Seguimiento del trámite"
+                      modal="true"  resizable="false"
+                      showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
+                      width="700" minHeight="400" style="max-height: 700px">
+                <h:form>
+                    <p:tree value="#{treeControlador.cargarTree(tramiteAsignacionControlador.objSelTramite.tramite_id)}" var="tree"
+                            orientation="horizontal" dynamic="true">
+                        <p:treeNode>
+                            <h:outputText value="#{tree}"/>
+                            <p:commandLink style="width: 10px;margin-left: 20px" ajax="false" onclick="PrimeFaces.monitorDownload();"
+                                           rendered="#{tree!='Registros' and tree.substring(0,1)=='1'}">
+                                <f:param name="idTramite" value="#{tramiteAsignacionControlador.objSelTramite.tramite_id}"/>
+                                <p:graphicImage value="/resources/imagenes/d_gris.png" style="width: 18px;height: 18px;margin-bottom: -4px"/>
+                                <p:fileDownload value="#{treeControlador.downloadSeguimiento(tree,param.get('idTramite'))}"/>
+                            </p:commandLink>
+                        </p:treeNode>
+                    </p:tree><br/>
+                    <h:outputText value="Último comentario del seguimiento:" /><br/>
+                    <object align="left">
+                        #{treeControlador.ultimoComentario(tramiteAsignacionControlador.objSelTramite.tramite_id, tramiteAsignacionControlador.objSelTramite.tramite_codigo)}
+                    </object>
                 </h:form>
             </p:dialog>
         </ui:define>
